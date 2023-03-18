@@ -191,7 +191,7 @@ function Dashboard() {
               icon="calendar_month"
               title="טווחי תאריכים"
               count={
-                <Grid justifyContent="center" align-items="stretch" container>
+                <Grid justifyContent="center" direction="row" align-items="stretch" container>
                   <Input
                     name="minDate"
                     type="date"
@@ -215,9 +215,11 @@ function Dashboard() {
                 color: "success",
                 // label: "הועלה ב ",
                 amount: (
-                  <MDButton variant="gradient" color="success">
-                    אישור
-                  </MDButton>
+                  <Grid justifyContent="center" align-items="stretch" rowSpacing={1} container>
+                    <MDButton variant="gradient" color="mekatnar">
+                      אישור
+                    </MDButton>
+                  </Grid>
                 ),
               }}
             />

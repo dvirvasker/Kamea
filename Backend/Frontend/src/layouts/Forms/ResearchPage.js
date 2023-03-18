@@ -183,19 +183,19 @@ export default function HozlaPrintRequestForm() {
   const [researchPage, setresearchPage] = useState([
     {
       name: "נזקים",
-      text: "חלגכ גכלגחכלי ג גלכיגד גכ",
+      text: "פירוט נזקי מנוע, התרעות, תאונות ותקלות חוזרות",
       url: "nezakimTable",
       icon: "car_crash",
     },
     {
       name: "אירועים",
-      text: "גדכג דגלחג ג כחג  כלג",
+      text: "פירוט סוגי אירועים, סוגי רכבים והפעילויות המונעות",
       url: "eventsTable",
       icon: "event_repeat",
     },
     {
       name: "טיפולים",
-      text: "גכחיגכל  גכגדע חגדעכ ד יג",
+      text: "פירוט סד''כ, מועדי טיפול משוערים ואם יש חריגה",
       url: "treatmentsTable",
       icon: "science",
     },
