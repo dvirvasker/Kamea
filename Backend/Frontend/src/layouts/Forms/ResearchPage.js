@@ -771,61 +771,61 @@ export default function HozlaPrintRequestForm() {
   const ResearchPage = () => (
     <Container className="" dir="rtl">
       <Row className="justify-content-center">
-        <Col xl="10" lg="10" md="10" sm="10" xs="10">
-          <Card className="shadow border-0">
-            <CardBody className="px-lg-8 py-lg-10">
-              <MDBox
-                variant="gradient"
-                bgColor="mekatnar"
-                borderRadius="lg"
-                coloredShadow="mekatnar"
-                mx={2}
-                mt={-3}
-                p={3}
-                mb={5}
-                textAlign="center"
-              >
-                <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-                  תחקורים{" "}
-                </MDTypography>
-              </MDBox>
-              <Form style={{ textAlign: "right" }} role="form">
-                <FormGroup row className="" onChange={onSubmit}>
-                  {researchPage.map((research, index) => (
-                    <Grid item xs={12} sm={12} md={12} key={index} spacing={2}>
-                      {/* <MDTypography variant="h6" color="mekatnar">
+        <Col xl="12" lg="12" md="12" sm="12" xs="12">
+          {/* <Card className="shadow border-0"> */}
+          {/* <CardBody className="px-lg-8 py-lg-10"> */}
+          <MDBox
+            variant="gradient"
+            bgColor="mekatnar"
+            borderRadius="lg"
+            coloredShadow="mekatnar"
+            mx={2}
+            mt={-3}
+            p={3}
+            mb={5}
+            textAlign="center"
+          >
+            <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
+              תחקורים{" "}
+            </MDTypography>
+          </MDBox>
+          <Form style={{ textAlign: "right" }} role="form">
+            <FormGroup row className="" onChange={onSubmit}>
+              {researchPage.map((research, index) => (
+                <Grid item xs={12} sm={12} md={12} key={index} spacing={2}>
+                  {/* <MDTypography variant="h6" color="mekatnar">
                         {volume.volumeType}:
                       </MDTypography> */}
-                      <FormGroup>
-                        <MDBox
-                          bgColor="light"
-                          borderRadius="md"
-                          opacity={5}
-                          shadow="lg"
-                          variant="contained"
-                          p={1}
-                          mx={0}
-                          // mt={-3}
-                          // p={3}
-                          // mb={1}
-                        >
-                          <MDAlert dir="rtl" sx={{ alignItems: "stretch" }} color="mekatnar">
-                            <Icon fontSize="small">{research.icon}</Icon>
-                            <MDTypography variant="h4" color="white">
-                              {research.name}
-                            </MDTypography>
-                          </MDAlert>
-                          <MDTypography variant="body1" color="mekatnar">
-                            {research.text}
-                          </MDTypography>
-                          <Grid container direction="column" justifyContent="end" alignItems="end">
-                            <Link to={`/ResearchPage/${research.url}`} key={research.url}>
-                              <MDButton variant="outlined" color="mekatnar">
-                                צפה בטבלה <Icon fontSize="small">visibility</Icon>&nbsp;
-                              </MDButton>
-                            </Link>
-                          </Grid>
-                          {/* <MDButton
+                  <FormGroup>
+                    <MDBox
+                      bgColor="light"
+                      borderRadius="md"
+                      opacity={5}
+                      shadow="lg"
+                      variant="contained"
+                      p={1}
+                      mx={0}
+                      // mt={-3}
+                      // p={3}
+                      mb={6}
+                    >
+                      <MDAlert mt={-5} dir="rtl" sx={{ alignItems: "stretch" }} color="mekatnar">
+                        <Icon fontSize="small">{research.icon}</Icon>
+                        <MDTypography variant="h4" color="white">
+                          {research.name}
+                        </MDTypography>
+                      </MDAlert>
+                      <MDTypography variant="body1" color="mekatnar">
+                        {research.text}
+                      </MDTypography>
+                      <Grid container direction="column" justifyContent="end" alignItems="end">
+                        <Link to={`/ResearchPage/${research.url}`} key={research.url}>
+                          <MDButton variant="outlined" color="mekatnar">
+                            צפה בטבלה <Icon fontSize="small">visibility</Icon>&nbsp;
+                          </MDButton>
+                        </Link>
+                      </Grid>
+                      {/* <MDButton
                             dir="llr"
                             variant="outlined"
                             color="mekatnar"
@@ -840,7 +840,7 @@ export default function HozlaPrintRequestForm() {
                           >
                             צפה בטבלה <Icon fontSize="small">visibility</Icon>&nbsp;
                           </MDButton> */}
-                          {/* {volume.statusVol === true ? (
+                      {/* {volume.statusVol === true ? (
                             <FormControlLabel
                               control={
                                 <Checkbox
@@ -872,7 +872,7 @@ export default function HozlaPrintRequestForm() {
                             />
                           )} */}
 
-                          {/* {volume.numOfCopies > 2 && index < 11 && (
+                      {/* {volume.numOfCopies > 2 && index < 11 && (
                             <MDTypography variant="h6" color="mekatnar">
                               נדרש אישור הוצל"א
                             </MDTypography>
@@ -882,18 +882,18 @@ export default function HozlaPrintRequestForm() {
                               נדרש אישור הוצל"א
                             </MDTypography>
                           )} */}
-                        </MDBox>
-                      </FormGroup>
-                    </Grid>
-                    // <Container>
+                    </MDBox>
+                  </FormGroup>
+                </Grid>
+                // <Container>
 
-                    // </Container>
-                  ))}
-                </FormGroup>
+                // </Container>
+              ))}
+            </FormGroup>
 
-                <FormGroup row>
-                  <FormGroup>
-                    {/* <input
+            <FormGroup row>
+              <FormGroup>
+                {/* <input
                       accept=".pdf"
                       type="file"
                       id="select-files"
@@ -907,16 +907,16 @@ export default function HozlaPrintRequestForm() {
                       </MDButton>
                     </Label> */}
 
-                    {/* <Input
+                {/* <Input
                       type="file"
                       multiple
                       accept="application/pdf, image/png, image/jpeg"
                       onChange={handleFileEvent}
                       // disabled={fileLimit}
                     /> */}
-                  </FormGroup>
-                </FormGroup>
-                {/*
+              </FormGroup>
+            </FormGroup>
+            {/*
                       // ! Show img and file
                        {imageUrl && selectedFile && (
                          <MDBox mt={2} textAlign="center">
@@ -930,7 +930,7 @@ export default function HozlaPrintRequestForm() {
                       // ! Show img and file
                       */}
 
-                {/* <div className="text-center">
+            {/* <div className="text-center">
                   <MDButton
                     color="mekatnar"
                     size="large"
@@ -941,9 +941,9 @@ export default function HozlaPrintRequestForm() {
                     עדכן
                   </MDButton>
                 </div> */}
-              </Form>
-            </CardBody>
-          </Card>
+          </Form>
+          {/* </CardBody> */}
+          {/* </Card> */}
         </Col>
       </Row>
     </Container>

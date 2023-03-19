@@ -32,6 +32,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import MDButton from "components/MDButton";
 import { Link } from "react-router-dom";
+import Grid from "@mui/material/Grid";
 
 // user and auth import
 import { signin, authenticate, isAuthenticated } from "auth/index";
@@ -237,7 +238,7 @@ export default function data() {
     //* the tables headers
     columns: [
       { Header: "צ'", accessor: "Tzadik", align: "center" },
-      { Header: "סד''כ", accessor: "sadac", align: "center" },
+      // { Header: "סד''כ", accessor: "sadac", align: "center" },
       { Header: "מועד טיפול משוער", accessor: "estimatedDate", align: "center" },
       { Header: "חריגה", accessor: "deviation", align: "center" },
       //   { Header: "הייתה תנועה", accessor: "movement", align: "center" },
@@ -253,37 +254,80 @@ export default function data() {
       {
         Tzadik: "1243245",
         sadac: "33213",
-        estimatedDate: "17/2/2023",
+        estimatedDate: (
+          <Grid container direction="row" justifyContent="space-evenly" mx={3}>
+            <Progress variant="gradient" color="warning" value="70" />
+            <MDTypography component="p" variant="caption" color="text" fontWeight="medium">
+              12/2/2023
+            </MDTypography>
+          </Grid>
+        ),
         deviation: <MDBadge badgeContent="כן" color="error" size="sm" container />,
       },
       {
         Tzadik: "34745756",
         sadac: "23432",
-        estimatedDate: "18/2/2023",
+        estimatedDate: (
+          <Grid container direction="row" justifyContent="space-evenly" mx={3}>
+            <Progress variant="gradient" color="mekatnar" value="46" />
+            <MDTypography component="p" variant="caption" color="text" fontWeight="medium">
+              22/2/2023
+            </MDTypography>
+          </Grid>
+        ),
         deviation: <MDBadge badgeContent="לא" color="success" size="sm" container />,
       },
       {
         Tzadik: "432455",
         sadac: "23432",
-        estimatedDate: "23/2/2023",
+        estimatedDate: (
+          <Grid container direction="row" justifyContent="space-evenly" mx={3}>
+            <Progress variant="gradient" color="success" value="20" />
+            <MDTypography component="p" variant="caption" color="text" fontWeight="medium">
+              23/2/2023
+            </MDTypography>
+          </Grid>
+        ),
         deviation: <MDBadge badgeContent="לא" color="success" size="sm" container />,
       },
       {
         Tzadik: "54534332",
         sadac: "123432",
-        estimatedDate: "27/2/2023",
+        estimatedDate: (
+          <Grid container direction="row" justifyContent="space-evenly" mx={3}>
+            <Progress variant="gradient" color="error" value="84" />
+            <MDTypography component="p" variant="caption" color="text" fontWeight="medium">
+              23/2/2023
+            </MDTypography>
+          </Grid>
+        ),
         deviation: <MDBadge badgeContent="לא" color="success" size="sm" container />,
       },
       {
         Tzadik: "214421",
         sadac: "12743",
-        estimatedDate: "1/3/2023",
+        estimatedDate: (
+          <Grid container direction="row" justifyContent="space-evenly" mx={3}>
+            <Progress variant="gradient" color="error" value="100" />
+            <MDTypography component="p" variant="caption" color="text" fontWeight="medium">
+              25/2/2023
+            </MDTypography>
+          </Grid>
+        ),
         deviation: <MDBadge badgeContent="כן" color="error" size="sm" container />,
       },
       {
         Tzadik: "9067876",
         sadac: "32344",
-        estimatedDate: "2/3/2023",
+        estimatedDate: (
+          <Grid container direction="row" justifyContent="space-evenly" mx={3}>
+            <Progress variant="gradient" color="mekatnar" value="50" />
+
+            <MDTypography component="p" variant="caption" color="text" fontWeight="medium">
+              28/2/2023
+            </MDTypography>
+          </Grid>
+        ),
         deviation: <MDBadge badgeContent="לא" color="success" size="sm" container />,
       },
     ],
