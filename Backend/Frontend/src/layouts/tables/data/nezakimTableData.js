@@ -237,7 +237,7 @@ export default function data() {
     //* the tables headers
     columns: [
       { Header: "צ'", accessor: "Tzadik", align: "center" },
-      { Header: "נזקי מנוע", accessor: "nezkeManoa", align: "center" },
+      { Header: "פירוט נזקים", accessor: "damage", align: "center" },
       // { Header: "סוג הבקשה", accessor: "typeRequest", align: "center" },
       { Header: "חלוקה", accessor: "Haloka", align: "center" },
       { Header: "הייתה התרעה", accessor: "movement", align: "center" },
@@ -254,7 +254,7 @@ export default function data() {
     rows: [
       {
         Tzadik: "24332432",
-        nezkeManoa: "33213",
+        damage: "33213",
         Haloka: "פיקוד",
         movement: <MDBadge badgeContent="כן" color="error" size="sm" container />,
         accident: <MDBadge badgeContent="כן" color="error" size="sm" container />,
@@ -268,7 +268,7 @@ export default function data() {
       },
       {
         Tzadik: "213213",
-        nezkeManoa: "23432",
+        damage: "23432",
         Haloka: "אוגדה",
         movement: <MDBadge badgeContent="לא" color="success" size="sm" container />,
         accident: <MDBadge badgeContent="לא" color="success" size="sm" container />,
@@ -282,7 +282,7 @@ export default function data() {
       },
       {
         Tzadik: "112335",
-        nezkeManoa: "23432",
+        damage: "23432",
         Haloka: "חטמ''ר",
         movement: <MDBadge badgeContent="לא" color="success" size="sm" container />,
         accident: <MDBadge badgeContent="לא" color="success" size="sm" container />,
@@ -296,7 +296,7 @@ export default function data() {
       },
       {
         Tzadik: "7687642",
-        nezkeManoa: "123432",
+        damage: "123432",
         Haloka: "אוגדה",
         movement: <MDBadge badgeContent="לא" color="success" size="sm" container />,
         accident: <MDBadge badgeContent="לא" color="success" size="sm" container />,
@@ -310,7 +310,7 @@ export default function data() {
       },
       {
         Tzadik: "2343566",
-        nezkeManoa: "12743",
+        damage: "12743",
         Haloka: "אוגדה",
         movement: <MDBadge badgeContent="כן" color="error" size="sm" container />,
         accident: <MDBadge badgeContent="כן" color="error" size="sm" container />,
@@ -324,7 +324,7 @@ export default function data() {
       },
       {
         Tzadik: "4756889",
-        nezkeManoa: "32344",
+        damage: "32344",
         Haloka: "חטמ''ר",
         movement: <MDBadge badgeContent="לא" color="success" size="sm" container />,
         accident: <MDBadge badgeContent="לא" color="success" size="sm" container />,

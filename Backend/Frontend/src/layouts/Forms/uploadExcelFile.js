@@ -189,6 +189,7 @@ export default function HozlaPrintRequestForm() {
     //   },
     // },
     error: false,
+    errorFile: false,
     successmsg: false,
     loading: false,
     NavigateToReferrer: false,
@@ -262,17 +263,18 @@ export default function HozlaPrintRequestForm() {
           } else {
             flag = false;
             ErrorReason.push(`לא תקין ${filePush.name} קובץ`);
+            if (flag !== true) {
+              ErrorReason.forEach((reason) => {
+                toast.error(reason);
+                return false;
+                // setData({ ...data, loading: false, successmsg: false, error: true });
+              });
+            } else {
+              return true;
+              // setData({ ...data, loading: false, successmsg: true, error: false });
+            }
           }
-          if (flag !== true) {
-            ErrorReason.forEach((reason) => {
-              toast.error(reason);
-              return false;
-              // setData({ ...data, loading: false, successmsg: false, error: true });
-            });
-          } else {
-            return true;
-            // setData({ ...data, loading: false, successmsg: true, error: false });
-          }
+
           // console.log("file name: " + data.propPrint.nameFile);
           // setPropPrint({ ...propPrint, nameFile: filePush.name });
           // setTextArea({ ...textArea, nameFiletxt: filePush.name });
@@ -294,7 +296,7 @@ export default function HozlaPrintRequestForm() {
   };
 
   const setRangeOfDates = (fileData) => {
-    const ErrorReason = [];
+    // const ErrorReason = [];
     const promise = new Promise((resolve, reject) => {
       const fileReader = new FileReader();
       fileReader.readAsArrayBuffer(fileData);
@@ -323,12 +325,28 @@ export default function HozlaPrintRequestForm() {
       if (d[0]["היסטוריית אירועים"]) {
         console.log(d[0]["היסטוריית אירועים"]);
         setData({ ...data, rangeOfDates: d[0]["היסטוריית אירועים"], dataFile: d });
-      } else if (!d[0]["היסטוריית אירועים"]) {
-        ErrorReason.forEach((reason) => {
-          toast.error(reason);
-          return false;
-          // setData({ ...data, loading: false, successmsg: false, error: true });
-        });
+      } else {
+        let flag = true;
+        const ErrorReason = [];
+
+        // if (files.length === 0) {
+        flag = false;
+        ErrorReason.push("קובץ לא תקין");
+        // toast.error(ErrorReason);
+        // }
+        if (flag !== true) {
+          ErrorReason.forEach((reason) => {
+            toast.error(reason);
+            return false;
+          });
+        } else {
+          return true;
+        }
+        // ErrorReason.forEach((reason) => {
+        //   toast.error(reason);
+        //   return false;
+        //   // setData({ ...data, loading: false, successmsg: false, error: true });
+        // });
         setFiles([]);
       }
     });
@@ -432,7 +450,24 @@ export default function HozlaPrintRequestForm() {
       SendFormData(event);
     }
   };
+  // const CheckFile = () => {
+  //   let flag = true;
+  //   const ErrorReason = [];
 
+  //   // if (files.length === 0) {
+  //   //   flag = false;
+  //     ErrorReason.push("קובץ לא תקין");
+  //     // toast.error(ErrorReason);
+  //   // }
+  //   if (flag !== true) {
+  //     ErrorReason.forEach((reason) => {
+  //       toast.error(reason);
+  //       return false;
+  //     });
+  //   } else {
+  //     return true;
+  //   }
+  // }
   const CheckSignUpForm = (event) => {
     event.preventDefault();
     let flag = true;
@@ -456,7 +491,14 @@ export default function HozlaPrintRequestForm() {
   const SendFormData = (event) => {
     // CreateAssessmentData();
     event.preventDefault();
-    setData({ ...data, loading: true, successmsg: false, error: false, NavigateToReferrer: false });
+    setData({
+      ...data,
+      loading: true,
+      successmsg: false,
+      error: false,
+      errorFile: false,
+      NavigateToReferrer: false,
+    });
     console.log(`files: ${files}`);
     //* Sending only the files to the DB
     //! the separating code lines from singlefile to multifiles
@@ -512,6 +554,7 @@ export default function HozlaPrintRequestForm() {
             work_id: res.data,
             loading: false,
             error: false,
+            errorFile: false,
             successmsg: true,
             NavigateToReferrer: false,
           });
@@ -526,6 +569,7 @@ export default function HozlaPrintRequestForm() {
             errortype: error.response,
             loading: false,
             error: true,
+            errorFile: false,
             NavigateToReferrer: false,
           });
         });
@@ -629,7 +673,14 @@ export default function HozlaPrintRequestForm() {
   // }, [dataFiles]);
 
   const handleCloseSuccsecModal = () => {
-    setData({ ...data, loading: false, error: false, successmsg: false, NavigateToReferrer: true });
+    setData({
+      ...data,
+      loading: false,
+      errorFile: false,
+      error: false,
+      successmsg: false,
+      NavigateToReferrer: true,
+    });
   };
   const handleCloseLoadingModal = () => {
     setData({ ...data, loading: false });
@@ -639,6 +690,17 @@ export default function HozlaPrintRequestForm() {
       ...data,
       loading: false,
       error: false,
+      errorFile: false,
+      successmsg: false,
+      NavigateToReferrer: false,
+    });
+  };
+  const handleCloseErrorFileModal = () => {
+    setData({
+      ...data,
+      loading: false,
+      error: false,
+      errorFile: false,
       successmsg: false,
       NavigateToReferrer: false,
     });
@@ -680,6 +742,36 @@ export default function HozlaPrintRequestForm() {
             mt={1}
           >
             מספר אסמכתא: {/* {data.work_id} */} {parseInt(data.work_id.slice(-4), 36)}
+          </MDTypography>
+        </DialogContent>
+      </MDBox>
+    </Dialog>
+  );
+  const showErrorFile = () => (
+    <Dialog
+      open={data.errorFile}
+      onClose={handleCloseErrorFileModal}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <MDBox
+        variant="gradient"
+        bgColor="error"
+        coloredShadow="error"
+        borderRadius="l"
+        // mx={2}
+        // mt={2}
+        p={3}
+        // mb={2}
+        textAlign="center"
+      >
+        <MDTypography variant="h1" fontWeight="medium" color="white" mt={1}>
+          קובץ לא תקין
+        </MDTypography>
+
+        <DialogContent>
+          <MDTypography variant="h6" fontWeight="medium" color="white" mt={1}>
+            אנא נסה קובץ תקין ממערכת ענ"א
           </MDTypography>
         </DialogContent>
       </MDBox>
@@ -863,172 +955,6 @@ export default function HozlaPrintRequestForm() {
               </MDBox>
               <Form style={{ textAlign: "right" }} role="form" onSubmit={onSubmit}>
                 <FormGroup row className="">
-                  {/* <FormGroup>
-                    <Label for="unit">{textPlaceHolderInputs[0]}</Label>
-                    <Input
-                      // placeholder={textPlaceHolderInputs[0]}
-                      id="unit"
-                      name="unit"
-                      type="text"
-                      value={data.unit}
-                      onChange={handleChange}
-                    />
-                  </FormGroup>
-                  <FormGroup>
-                    <Label for="anaf">{textPlaceHolderInputs[1]}</Label>
-                    <Input
-                      // placeholder={textPlaceHolderInputs[1]}
-                      name="anaf"
-                      type="text"
-                      value={data.anaf}
-                      onChange={handleChange}
-                    />
-                  </FormGroup>
-                  <FormGroup>
-                    <Label for="mador">{textPlaceHolderInputs[2]}</Label>
-                    <Input
-                      // placeholder={textPlaceHolderInputs[2]}
-                      name="mador"
-                      type="text"
-                      value={data.mador}
-                      onChange={handleChange}
-                    />
-                  </FormGroup>
-                  <FormGroup>
-                    <Label for="phoneNumber">{textPlaceHolderInputs[3]}</Label>
-                    <Input
-                      // placeholder={textPlaceHolderInputs[3]}
-                      name="phoneNumber"
-                      type="text"
-                      value={data.phoneNumber}
-                      onChange={handleChange}
-                      maxLength={10}
-                    />
-                  </FormGroup>
-                  <FormGroup>
-                    <Label for="workName">{textPlaceHolderInputs[4]}</Label>
-                    <Input
-                      // placeholder={textPlaceHolderInputs[4]}
-                      name="workName"
-                      type="text"
-                      value={data.workName}
-                      onChange={handleChange}
-                    />
-                  </FormGroup>
-                  <FormGroup>
-                    <Label for="workClearance">{textPlaceHolderInputs[5]}</Label>
-                    <Input
-                      // placeholder={textPlaceHolderInputs[5]}
-                      name="workClearance"
-                      type="select"
-                      value={data.workClearance}
-                      onChange={handleChange}
-                    >
-                      <option defult value="1">
-                        שמור
-                      </option>
-                      <option value="0">בלמ"ס</option>
-                      <option value="2">סודי</option>
-                    </Input>
-                  </FormGroup>
-                </FormGroup>
-                <FormGroup row className="">
-                  <FormGroup>
-                    <Label for="bindingType">{textPlaceHolderInputs[6]}</Label>
-                    <Input
-                      // placeholder={textPlaceHolderInputs[6]}
-                      name="bindingType"
-                      type="select"
-                      value={data.bindingType}
-                      onChange={handleChange}
-                    >
-                      <option defult value="0">
-                        הידוק
-                      </option>
-                      <option value="1">ספירלה</option>
-                      <option value="2">חירור</option>
-                      <option value="3">אחר</option>
-                    </Input>
-                    {data.bindingType === "3" && (
-                      <Input
-                        name="bindingTypeOther"
-                        type="text"
-                        value={data.bindingTypeOther}
-                        onChange={handleChange}
-                      />
-                    )}
-                  </FormGroup> */}
-                  {/* <FormGroup>
-                    <Label for="copyType">{textPlaceHolderInputs[7]}</Label>
-                    <Input
-                      // placeholder={textPlaceHolderInputs[7]}
-                      name="copyType"
-                      type="select"
-                      value={data.copyType}
-                      onChange={handleChange}
-                    >
-                      <option defult value="b&w2">
-                        שחור לבן דו צדדי
-                      </option>
-                      <option value="color1">צבעוני יחיד</option>
-                      <option value="color2">צבעוני דו צדדי</option>
-                      <option value="b&w1">שחור לבן יחיד</option>
-                    </Input>
-                  </FormGroup> */}
-                  {/* <FormGroup> */}
-                  {/* <Label for="pageType">{textPlaceHolderInputs[13]}</Label>
-                    <Input
-                      name="pageType"
-                      type="select"
-                      value={data.pageType}
-                      onChange={handleChange}
-                    >
-                      <option value="A0">A0</option>
-                      <option value="A3">A3</option>
-                      <option defult value="A4">
-                        A4
-                      </option>
-                      <option value="A5">A5</option>
-                      <option value="A6">A6</option>
-                      <option value="A4b">A4 בריסטול</option>
-                      <option value="A3b">A3 בריסטול</option>
-                    </Input> */}
-                  {/* </FormGroup>
-                  <FormGroup>
-                    <Label for="numOfCopyies">{textPlaceHolderInputs[8]}</Label>
-                    <Input
-                      // placeholder={textPlaceHolderInputs[8]}
-                      name="numOfCopyies"
-                      type="number"
-                      min="1"
-                      value={data.numOfCopyies}
-                      onChange={handleChange}
-                    />
-                  </FormGroup>
-                </FormGroup> */}
-
-                  {/* <FormGroup row className="">
-                  <FormGroup>
-                    <Label for="fullNameAsker">{textPlaceHolderInputs[9]}</Label>
-                    <Input
-                      // placeholder={textPlaceHolderInputs[9]}
-                      name="fullNameAsker"
-                      type="text"
-                      value={data.fullNameAsker}
-                      onChange={handleChange}
-                    />
-                  </FormGroup>
-                  <FormGroup>
-                    <Label for="fullNameTakein">{textPlaceHolderInputs[11]}</Label>
-                    <Input
-                      // placeholder={textPlaceHolderInputs[9]}
-                      name="fullNameTakein"
-                      type="text"
-                      value={data.fullNameTakein}
-                      onChange={handleChange}
-                    />
-                  </FormGroup> */}
-
                   <FormGroup>
                     <Label for="workGivenDate">{textPlaceHolderInputs[10]}</Label>
                     <Input
@@ -1042,32 +968,7 @@ export default function HozlaPrintRequestForm() {
                     />
                   </FormGroup>
                 </FormGroup>
-                {/* <FormGroup row className="">
-                  <FormGroup>
-                    <Label for="workRecivedDate">{textPlaceHolderInputs[14]}</Label>
-                    <Input
-                      // placeholder={textPlaceHolderInputs[10]}
-                      name="workRecivedDate"
-                      type="date"
-                      value={data.workRecivedDate}
-                      min={data.workGivenDate}
-                      onChange={handleChange}
-                    />
-                  </FormGroup>
-                </FormGroup> */}
-                {/* <Popup
-                      trigger={
-                        <MDButton
-                          variant="gradient"
-                          color="mekatnar"
-                          circular="true"
-                          iconOnly="true"
-                          size="small"
-                        >
-                          <Icon>help_outline</Icon>
-                        </MDButton>
-                      }
-                    > */}
+
                 <DialogContent>
                   {/* <MDBox> */}
                   <img
@@ -1079,20 +980,6 @@ export default function HozlaPrintRequestForm() {
                 {/* </Popup> */}
                 <FormGroup row>
                   <FormGroup>
-                    {/* <input
-                      accept=".pdf"
-                      type="file"
-                      id="select-files"
-                      style={{ display: 'none' }}
-                      onChange={handleFileEvent}
-                      multiple
-                    />
-                    <Label htmlFor="select-files">
-                      <MDButton variant="contained" color="mekatnar" component="span">
-                        העלאת קובץ
-                      </MDButton>
-                    </Label> */}
-
                     <Input
                       type="file"
                       // multiple
@@ -1130,23 +1017,7 @@ export default function HozlaPrintRequestForm() {
                       <FormGroup>
                         {/* <FormText color="muted">ניתן לגרור את הקבצים לפי הסדר</FormText> */}
                       </FormGroup>
-                      {/* <FormGroup>
-                        <Label for="clientNote">הערות נוספות...</Label>
-                        <Input
-                          name="clientNote"
-                          type="textarea"
-                          // label=""
-                          onChange={handleChangeTxtAera}
-                          style={{ minWidth: 360 }}
-                          multiline
-                          rows={3}
-                          // contrast
-                          value={data.clientNote}
-                          // value={() => {
-                          //   setTextArea({ ...textArea, txt: filePush.name });
-                          // }}
-                        />
-                      </FormGroup> */}
+
                       <FormGroup>
                         <MDButton
                           dir="ltr"
@@ -1166,191 +1037,7 @@ export default function HozlaPrintRequestForm() {
                       </FormGroup>
                     </Container>
                   )}
-                  {
-                    // <Container>
-                    //   <DragDropContext onDragEnd={handleOnDragEnd}>
-                    //     <Droppable droppableId='items'>
-                    //       {(provided) => {
-                    //         return (
-                    //           <MDBox bgColor="light"
-                    //             {...provided.droppableProps}
-                    //             ref={provided.innerRef}
-                    //           >
-                    //             {
-                    //               files.map((el, i) => {
-                    //                 return (
-                    //                   <Draggable key={el.id} draggableId={el.name} index={i} >
-                    //                     {(provided) => {
-                    //                       return (
-                    //                         <div
-                    //                           ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}
-                    //                         >
-                    //                           <MDAlert color="mekatnar" >
-                    //                             <MDButton
-                    //                               iconOnly
-                    //                               variant="text"
-                    //                               onClick={handleRemove}
-                    //                             // onClick={handleDelete}
-                    //                             // onClick={() => {
-                    //                             //   setFiles(
-                    //                             //     el.filter(a =>
-                    //                             //       a.id !== files.id
-                    //                             //     ));
-                    //                             // }}
-                    //                             >
-                    //                               <Icon fontSize="small">delete</Icon>&nbsp;
-                    //                             </MDButton>
-                    //                             <MDBox>
-                    //                               <MDTypography variant="h6" color="light">{el.name}</MDTypography>
-                    //                               <MDTypography variant="subtitle2" color="light">{el.size} MB</MDTypography>
-                    //                             </MDBox>
-                    //                           </MDAlert>
-                    //                           <Label for={`${el.name}"copyType"`}>{textPlaceHolderInputs[7]}</Label>
-                    //                           <Input
-                    //                             // placeholder={textPlaceHolderInputs[7]}
-                    //                             name={`${el.name}"copyType"`}
-                    //                             // name={data.propPrint.nameFile}
-                    //                             type="select"
-                    //                             value={data.propPrint.props.propCopyType}
-                    //                             onChange={handleChange}
-                    //                           >
-                    //                             <option defult value="b&w2">
-                    //                               שחור לבן דו צדדי
-                    //                             </option>
-                    //                             <option value="color1">צבעוני יחיד</option>
-                    //                             <option value="color2">צבעוני דו צדדי</option>
-                    //                             <option value="b&w1">שחור לבן יחיד</option>
-                    //                           </Input>
-                    //                           <Label for={`${el.name}"copyType"`}>{textPlaceHolderInputs[13]}</Label>
-                    //                           <Input
-                    //                             name={`${el.name}"pageType"`}
-                    //                             type="select"
-                    //                             value={data.propPrint.props.propPageType}
-                    //                             onChange={handleChange}
-                    //                           >
-                    //                             <option value={`${el.name}"A0"`}>A0</option>
-                    //                             <option value={`${el.name}"A3"`}>A3</option>
-                    //                             <option defult value={`${el.name}"A4"`}>A4</option>
-                    //                             <option value={`${el.name}"A5"`}>A5</option>
-                    //                             <option value={`${el.name}"A6"`}>A6</option>
-                    //                             <option value={`${el.name}"A4b"`}>A4 בריסטול</option>
-                    //                             <option value={`${el.name}"A3b"`}>A3 בריסטול</option>
-                    //                           </Input>
-                    //                           {/* <Popup
-                    //                             trigger={
-                    //                               <MDButton
-                    //                                 variant="gradient"
-                    //                                 color="mekatnar"
-                    //                                 circular="true"
-                    //                                 iconOnly="true"
-                    //                                 size="small"
-                    //                               >
-                    //                                 <Icon>help_outline</Icon>
-                    //                               </MDButton>
-                    //                             }
-                    //                           >
-                    //                             <MDAlert color="mekatnar">
-                    //                               <img src={A_paper_size_a6} style={{ width: 350, height: 250 }} />
-                    //                             </MDAlert>
-                    //                           </Popup> */}
-                    //                         </div>
-                    //                       )
-                    //                     }}
-                    //                   </Draggable >
-                    //                 )
-                    //               })
-                    //             }
-                    //             {provided.placeholder}
-                    //           </MDBox>
-                    //         )
-                    //       }}
-                    //     </Droppable>
-                    //   </DragDropContext>
-                    // </Container>
-                    // <DragDropContext onDragEnd={handleOnDragEnd}>
-                    //   <Droppable>
-                    //     {(provided) => (
-                    //       <ul {...provided.droppableProps} ref={provided.innerRef}>
-                    //         {files.map((file => {
-                    //           return (
-                    //             <Draggable>
-                    //               {(provided) => (
-                    //                 // <li ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                    //                 //   <div>
-                    //                 //     {/* <img src={thumb} alt={`${name} Thumb`} /> */}
-                    //                 //   </div>
-                    //                 //   <p>
-                    //                 //     {name}
-                    //                 //   </p>
-                    //                 // </li>
-                    //                 <MDAlert color="mekatnar" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                    //                   {/* <MDButton
-                    //                     iconOnly
-                    //                     variant="text"
-                    //                     // onClick={handleDelete}
-                    //                     onClick={() => {
-                    //                       setFiles(
-                    //                         file.filter(a =>
-                    //                           a.id !== files.id
-                    //                         )
-                    //                       );
-                    //                     }}
-                    //                   >
-                    //                     <Icon fontSize="small">delete</Icon>&nbsp;
-                    //                   </MDButton> */}
-                    //                   <MDBox>
-                    //                     <MDTypography variant="h6" color="light">{file.name}</MDTypography>
-                    //                     <MDTypography variant="subtitle2" color="light">{file.size} MB</MDTypography>
-                    //                   </MDBox>
-                    //                 </MDAlert>
-                    //               )}
-                    //             </Draggable>
-                    //           );
-                    //         }))}
-                    //         {provided.placeholder}
-                    //       </ul>
-                    //     )}
-                    //   </Droppable>
-                    // </DragDropContext>
-                    // files.map(file => (
-                    //   <div >
-                    //     <MDAlert color="mekatnar" >
-                    //       <MDButton
-                    //         iconOnly
-                    //         variant="text"
-                    //         // onClick={handleDelete}
-                    //         onClick={() => {
-                    //           setFiles(
-                    //             file.filter(a =>
-                    //               a.id !== files.id
-                    //             )
-                    //           );
-                    //         }}
-                    //       >
-                    //         <Icon fontSize="small">delete</Icon>&nbsp;
-                    //       </MDButton>
-                    //       <MDBox>
-                    //         <MDTypography variant="h6" color="light">{file.name}</MDTypography>
-                    //         <MDTypography variant="subtitle2" color="light">{file.size} MB</MDTypography>
-                    //       </MDBox>
-                    //     </MDAlert>
-                    //   </div>
-                    // ))
-                  }
                 </FormGroup>
-                {/*
-                      // ! Show img and file
-                       {imageUrl && selectedFile && (
-                         <MDBox mt={2} textAlign="center">
-                          <div>קבצים:</div>
-                          <img src={imageUrl} alt={selectedFile.name} height="100px" />
-                          <p>
-                            {selectedFile.name}
-                          </p>
-                        </MDBox>
-                      )} 
-                      // ! Show img and file
-                      */}
 
                 <div className="text-center">
                   <MDButton
@@ -1375,6 +1062,7 @@ export default function HozlaPrintRequestForm() {
   return (
     <>
       {showError()}
+      {showErrorFile()}
       {showSuccess()}
       {showLoading()}
       {NavigateUser()}

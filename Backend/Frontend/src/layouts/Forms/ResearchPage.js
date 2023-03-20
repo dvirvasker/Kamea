@@ -183,7 +183,7 @@ export default function HozlaPrintRequestForm() {
   const [researchPage, setresearchPage] = useState([
     {
       name: "נזקים",
-      text: "פירוט נזקי מנוע, התרעות, תאונות ותקלות חוזרות",
+      text: "פירוט נזקים, התרעות, תאונות ותקלות חוזרות",
       url: "nezakimTable",
       icon: "car_crash",
     },
@@ -195,7 +195,7 @@ export default function HozlaPrintRequestForm() {
     },
     {
       name: "טיפולים",
-      text: "פירוט סד''כ, מועדי טיפול משוערים ואם יש חריגה",
+      text: "פירוט מועדי טיפול משוערים ואם יש חריגה",
       url: "treatmentsTable",
       icon: "science",
     },
@@ -779,10 +779,10 @@ export default function HozlaPrintRequestForm() {
             bgColor="mekatnar"
             borderRadius="lg"
             coloredShadow="mekatnar"
-            mx={2}
+            mx={10}
             mt={-3}
-            p={3}
-            mb={5}
+            p={2}
+            mb={9}
             textAlign="center"
           >
             <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
@@ -792,7 +792,7 @@ export default function HozlaPrintRequestForm() {
           <Form style={{ textAlign: "right" }} role="form">
             <FormGroup row className="" onChange={onSubmit}>
               {researchPage.map((research, index) => (
-                <Grid item xs={12} sm={12} md={12} key={index} spacing={2}>
+                <Grid mb={3} item xs={12} sm={12} md={12} key={index} spacing={2}>
                   {/* <MDTypography variant="h6" color="mekatnar">
                         {volume.volumeType}:
                       </MDTypography> */}

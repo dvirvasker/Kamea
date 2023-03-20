@@ -22,6 +22,9 @@ Coded by www.creative-tim.com
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+import AppBar from "@mui/material/AppBar";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -38,7 +41,10 @@ import authorsTableData from "layouts/tables/data/authorsTableData";
 import projectsTableData from "layouts/tables/data/projectsTableData";
 import treatmentsTableData from "layouts/tables/data/treatmentsTableData";
 import { Dialog, DialogContent } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+// Material Dashboard 2 React base styles
+import breakpoints from "assets/theme/base/breakpoints";
 
 import { CardBody, Col, Container, Form, FormGroup, FormText, Input, Label, Row } from "reactstrap";
 import axios from "axios";
@@ -48,7 +54,49 @@ const treatmentsTable = () => {
   const tableTittle = "טיפולים";
 
   const [dbError, setDbError] = useState(false);
+  const [tabValue, setTabValue] = useState();
+  const [tabsOrientation, setTabsOrientation] = useState("horizontal");
   //   const { columns, rows } = authorsTableData();
+  useEffect(() => {
+    // A function that sets the orientation state of the tabs.
+    function handleTabsOrientation() {
+      return window.innerWidth < breakpoints.values.sm
+        ? setTabsOrientation("vertical")
+        : setTabsOrientation("horizontal");
+    }
+
+    /** 
+     The event listener that's calling the handleTabsOrientation function when resizing the window.
+    */
+    window.addEventListener("resize", handleTabsOrientation);
+
+    // Call the handleTabsOrientation function to set the state with the initial value.
+    handleTabsOrientation();
+
+    // Remove event listener on cleanup
+    return () => window.removeEventListener("resize", handleTabsOrientation);
+  }, [tabsOrientation]);
+  const handleSetTabValue = (event, tabIndex) => {
+    let tabIndexName = "";
+
+    if (tabIndex === 0) {
+      tabIndexName = "גדוד";
+    } else if (tabIndex === 1) {
+      tabIndexName = "חטיבה";
+    } else if (tabIndex === 2) {
+      tabIndexName = "אוגדה";
+    } else if (tabIndex === 3) {
+      tabIndexName = "פיקוד";
+    } else if (tabIndex === 4) {
+      tabIndexName = "מטכ''ל";
+    }
+    setTabValue(tabIndex);
+    // props.setTabViewValue(tabIndex);
+
+    // if (typeof window !== "undefined") {
+    //   localStorage.setItem("dashboardView", JSON.stringify({ tabIndexName, tabIndex }));
+    // }
+  };
   const {
     columns: pColumns,
     rows: pRows,
@@ -108,6 +156,52 @@ const treatmentsTable = () => {
               <MDTypography variant="h3" color="white">
                 {tableTittle}
               </MDTypography>
+              <Grid item xs={12} md={6} lg={4} sx={{ ml: "auto" }}>
+                <AppBar position="static">
+                  <Tabs orientation={tabsOrientation} value={tabValue} onChange={handleSetTabValue}>
+                    <Tab
+                      label="גדוד"
+                      // icon={
+                      //   <Icon fontSize="small" sx={{ mt: -0.25 }}>
+                      //     settings
+                      //   </Icon>
+                      // }
+                    />
+                    <Tab
+                      label="חטיבה"
+                      // icon={
+                      //   <Icon fontSize="small" sx={{ mt: -0.25 }}>
+                      //     settings
+                      //   </Icon>
+                      // }
+                    />
+                    <Tab
+                      label="אוגדה"
+                      // icon={
+                      //   <Icon fontSize="small" sx={{ mt: -0.25 }}>
+                      //     email
+                      //   </Icon>
+                      // }
+                    />
+                    <Tab
+                      label="פיקוד"
+                      // icon={
+                      //   <Icon fontSize="small" sx={{ mt: -0.25 }}>
+                      //     home
+                      //   </Icon>
+                      // }
+                    />
+                    <Tab
+                      label="מטכ''ל"
+                      // icon={
+                      //   <Icon fontSize="small" sx={{ mt: -0.25 }}>
+                      //     home
+                      //   </Icon>
+                      // }
+                    />
+                  </Tabs>
+                </AppBar>
+              </Grid>
             </MDBox>
             <MDBox pt={3}>
               {pRows.length !== 0 ? (

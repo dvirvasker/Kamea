@@ -48,7 +48,7 @@ import axios from "axios";
 import { Outlet, Link } from "react-router-dom";
 
 const regulsrUserRequestsTable = () => {
-  const tableTittle = "קבצי ענ''א";
+  const tableTittle = "הקבצים שלי";
 
   const [dbError, setDbError] = useState(false);
   const [toAddFile, setToAddFile] = useState(false);

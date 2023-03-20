@@ -166,6 +166,7 @@ export default function data() {
   const dbRows = requestDB.map((hozla, index) => ({
     // project: <Project image={LogoAsana} name="Asana" />,
     fileID: parseInt(hozla._id.slice(-4), 36),
+    fileName: hozla.fileName,
     project: hozla.workName,
     clearance:
       // <MDTypography component="a" href="#" variant="button" color="text" fontWeight="medium">
@@ -245,7 +246,8 @@ export default function data() {
   return {
     //* the tables headers
     columns: [
-      { Header: "אסמכתא", accessor: "fileID", align: "center" },
+      // { Header: "אסמכתא", accessor: "fileID", align: "center" },
+      // { Header: "שם הקובץ", accessor: "fileName", align: "center" },
       // { Header: "סוג הבקשה", accessor: "typeRequest", align: "center" },
       // { Header: "שם המזמין", accessor: "NameRequester", align: "center" },
       // { Header: "שם העבודה", accessor: "project", align: "center" },
@@ -253,7 +255,7 @@ export default function data() {
       // { Header: "סטטוס", accessor: "status", align: "center" },
       { Header: "תאריך העלאה", accessor: "startDate", align: "center" },
       { Header: "היסטוריית אירועים", accessor: "diliveryDate", align: "center" },
-      { Header: "פרטים נוספים", accessor: "info", align: "center" },
+      { Header: "פרטי הקובץ", accessor: "info", align: "center" },
       { Header: "סטטיסטיקה", accessor: "statistics", align: "center" },
       // { Header: "פרטי הוצלא", accessor: "hozlaInfo", align: "center" },
     ],

@@ -273,9 +273,7 @@ export default function data() {
         haloka: "פיקוד",
         date: "2/2/2023",
         stopTime: "14:23",
-        preventing: (
-          <MDBadge badgeContent="שווא" color="success" size="sm" variant="contained" container />
-        ),
+        preventing: <MDBadge badgeContent="שווא" color="success" size="sm" container />,
         saving: "120",
         shav: "aaa",
         lackfluid: <MDBadge badgeContent="שמן" color="warning" size="sm" container />,
@@ -291,9 +289,7 @@ export default function data() {
         haloka: "חטמ''ר",
         date: "2/2/2023",
         stopTime: "12:45",
-        preventing: (
-          <MDBadge badgeContent="חוסר בנוזל" color="info" size="sm" variant="contained" container />
-        ),
+        preventing: <MDBadge badgeContent="חוסר בנוזל קירור" color="info" size="sm" container />,
         saving: "2500",
         shav: "aaa",
         lackfluid: <MDBadge badgeContent="קירור" color="info" size="sm" container />,
@@ -309,15 +305,7 @@ export default function data() {
         haloka: "אוגדה",
         date: "10/2/2023",
         stopTime: "12:52",
-        preventing: (
-          <MDBadge
-            badgeContent="תיקון נזילה"
-            color="dark"
-            size="sm"
-            variant="contained"
-            container
-          />
-        ),
+        preventing: <MDBadge badgeContent="תיקון נזילה" color="dark" size="sm" container />,
         saving: "1200",
         shav: "בבב",
         lackfluid: <MDBadge badgeContent="קירור" color="info" size="sm" container />,
@@ -333,15 +321,7 @@ export default function data() {
         haloka: "פיקוד",
         date: "23/1/2023",
         stopTime: "14:23",
-        preventing: (
-          <MDBadge
-            badgeContent="תיקון מכלול"
-            color="primary"
-            size="sm"
-            variant="contained"
-            container
-          />
-        ),
+        preventing: <MDBadge badgeContent="תיקון מכלול" color="primary" size="sm" container />,
         saving: "120",
         shav: "aaa",
         lackfluid: <MDBadge badgeContent="שמן" color="warning" size="sm" container />,
@@ -375,15 +355,7 @@ export default function data() {
         haloka: "חטמ''ר",
         date: "2/3/2023",
         stopTime: "19:45",
-        preventing: (
-          <MDBadge
-            badgeContent="בירור במוסך"
-            color="warning"
-            size="sm"
-            variant="contained"
-            container
-          />
-        ),
+        preventing: <MDBadge badgeContent="חוסר בשמן" color="warning" size="sm" container />,
         saving: "344",
         shav: "sss",
         lackfluid: <MDBadge badgeContent="קירור" color="info" size="sm" container />,
@@ -391,6 +363,38 @@ export default function data() {
         repairassembly: "www",
         engine: "www",
         clarification: "eee sss 333 rrr ee",
+      },
+      {
+        eventType: "324",
+        Tzadik: "645623",
+        carType: "jeep",
+        haloka: "חטמ''ר",
+        date: "5/3/2023",
+        stopTime: "15:49",
+        preventing: <MDBadge badgeContent="בירור במוסך" color="mekatnar" size="sm" container />,
+        saving: "344",
+        shav: "sss",
+        lackfluid: <MDBadge badgeContent="קירור" color="info" size="sm" container />,
+        leakrepair: "www",
+        repairassembly: "www",
+        engine: "www",
+        clarification: "eee sss 333 rrr ee",
+      },
+      {
+        eventType: "4354",
+        Tzadik: "325244",
+        carType: "jeep",
+        haloka: "חטמ''ר",
+        date: "12/3/2023",
+        stopTime: "13:55",
+        preventing: <MDBadge badgeContent="ללא מידע" color="light" size="sm" container />,
+        saving: "2500",
+        shav: "aaa",
+        lackfluid: <MDBadge badgeContent="קירור" color="info" size="sm" container />,
+        leakrepair: "qqq",
+        repairassembly: "qqq",
+        engine: "qqq",
+        clarification: "ggg sss bbb aaaa ee",
       },
     ],
 
