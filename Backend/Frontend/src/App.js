@@ -549,7 +549,6 @@ after finish
 git add .
 git commit -m "A commit message Title" -m "description of the commit"
 git push
-aaaaaaaaaa
 
 !if we need to get after merge or update
   git pull => in the brancg you wish to localiy update
