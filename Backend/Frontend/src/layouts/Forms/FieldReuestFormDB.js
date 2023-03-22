@@ -97,7 +97,7 @@ const FieldReuestFormDB = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/hozlaRequests/${params.formID}`)
+      .get(`http://localhost:5000/NgCar/requsest/${params.formID}`)
       .then((response) => {
         // console.log(`the object data`);
         console.log(response.data);
@@ -272,7 +272,7 @@ const FieldReuestFormDB = () => {
     console.log(newStatus);
 
     axios
-      .post(`http://localhost:5000/hozlaRequests/statusUpdate/${params.formID}`, {
+      .post(`http://localhost:5000/NgCar/requsest/statusUpdate/${params.formID}`, {
         status: newStatus,
       })
       .then((response) => {
@@ -303,7 +303,7 @@ const FieldReuestFormDB = () => {
       fullNameReciver: data.fullNameReciver,
     };
     axios
-      .post(`http://localhost:5000/hozlaRequests/updateNameReciver/${params.formID}`, NameReciver)
+      .post(`http://localhost:5000/NgCar/requsest/updateNameReciver/${params.formID}`, NameReciver)
       .then((response) => {
         // console.groupCollapsed(`handleStatusChange -------- Axios.then`);
         // console.log(response.data);

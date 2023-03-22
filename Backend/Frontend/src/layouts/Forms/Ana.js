@@ -85,7 +85,7 @@ function Dashboard() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/hozlaRequests/getCountStatus`)
+      .get(`http://localhost:5000/NgCar/requsest/getCountStatus`)
       .then((responseStatus) => {
         console.log(responseStatus.data);
         setRequestDB(responseStatus.data);
@@ -102,28 +102,28 @@ function Dashboard() {
         setIsError(true);
       });
     const year = new Date().getFullYear();
-    axios
-      .get(`http://localhost:5000/hozlaAdminRequests/getAnafPrintCount/${year}`)
-      .then((responseAnaf) => {
-        console.log(responseAnaf.data);
-        setAnaf({
-          ...anaf,
-          tun: responseAnaf.data.tun,
-          takom: responseAnaf.data.takom,
-          tom: responseAnaf.data.tom,
-          sadot: responseAnaf.data.sadot,
-          aczaka: responseAnaf.data.aczaka,
-          segel: responseAnaf.data.segel,
-          peer: responseAnaf.data.peer,
-          ergon: responseAnaf.data.ergon,
-          shalishot: responseAnaf.data.shalishot,
-          other: responseAnaf.data.other,
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-        setIsError(true);
-      });
+    // axios
+    //   .get(`http://localhost:5000/hozlaAdminRequests/getAnafPrintCount/${year}`)
+    //   .then((responseAnaf) => {
+    //     console.log(responseAnaf.data);
+    //     setAnaf({
+    //       ...anaf,
+    //       tun: responseAnaf.data.tun,
+    //       takom: responseAnaf.data.takom,
+    //       tom: responseAnaf.data.tom,
+    //       sadot: responseAnaf.data.sadot,
+    //       aczaka: responseAnaf.data.aczaka,
+    //       segel: responseAnaf.data.segel,
+    //       peer: responseAnaf.data.peer,
+    //       ergon: responseAnaf.data.ergon,
+    //       shalishot: responseAnaf.data.shalishot,
+    //       other: responseAnaf.data.other,
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //     setIsError(true);
+    //   });
   }, []);
 
   const renderInfoSB = (

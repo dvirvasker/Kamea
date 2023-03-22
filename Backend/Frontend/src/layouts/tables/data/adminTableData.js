@@ -79,7 +79,7 @@ export default function data() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/hozlaRequests/activeRequests`)
+      .get(`http://localhost:5000/NgCar/requsest/activeRequests`)
       .then((response) => {
         console.log(response.data);
         setRequestDB(response.data);

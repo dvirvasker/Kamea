@@ -179,6 +179,7 @@ export default function HozlaPrintRequestForm() {
 
     ordernum: "",
     clientNote: "",
+    fileName: "",
 
     errortype: "",
     // propPrint: {
@@ -244,6 +245,8 @@ export default function HozlaPrintRequestForm() {
             filePush.type === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
           ) {
             uploaded.push(filePush);
+            // console.log(filePush.name);
+            // setData({ ...data, fileName: "filePush.name" });
             // const newfield = {
             //   nameFile: `${filePush.name}`,
             //   propCopyType: "b&w2",
@@ -262,6 +265,7 @@ export default function HozlaPrintRequestForm() {
             console.log(propPrint);
           } else {
             flag = false;
+
             ErrorReason.push(`לא תקין ${filePush.name} קובץ`);
             if (flag !== true) {
               ErrorReason.forEach((reason) => {
@@ -506,6 +510,7 @@ export default function HozlaPrintRequestForm() {
     Object.keys(files).forEach((key) => {
       formFilesData.append("files", files[key]);
     });
+    console.log(files[0].name);
     // for (const key of Object.keys(files)) {
     //   formFilesData.append("files", files[key]);
     // }
@@ -528,6 +533,7 @@ export default function HozlaPrintRequestForm() {
         // phoneNumber: data.phoneNumber,
         // fullNameAsker: data.fullNameAsker,
         workGivenDate: data.workGivenDate,
+        fileName: files[0].name,
 
         // fullNameReciver: data.fullNameReciver,
         // fullNameTakein: data.fullNameTakein,
@@ -545,9 +551,93 @@ export default function HozlaPrintRequestForm() {
         // ordernum: data.ordernum,
         // clientNote: data.clientNote,
       };
+      const excelDataMerage = {
+        // numPages: 1,
+        personalnumber: data.personalnumber,
+        excelDataMerage: JSON.stringify(data.dataFile),
+      };
+      // const personalnumber = {
+      //   personalnumber: data.personalnumber,
+      // };
+
+      // axios
+      //   .get(`http://localhost:5000/NgCar/MerageAnaExcelData/requestBy/${data.personalnumber}`)
+      //   .then((responsePN) => {
+      //     if (responsePN === null) {
+      axios
+        .post(`http://localhost:5000/NgCar/MerageAnaExcelData/add`, excelDataMerage)
+        .then((responseData) => {
+          setData({
+            ...data,
+            // work_id: res.data,
+            loading: false,
+            error: false,
+            errorFile: false,
+            successmsg: true,
+            NavigateToReferrer: false,
+          });
+          console.log(responseData.data);
+        })
+        .catch((error) => {
+          // console.log(error);
+          setData({
+            ...data,
+            errortype: error.response,
+            loading: false,
+            error: true,
+            errorFile: false,
+            NavigateToReferrer: false,
+          });
+        });
+      //     } else {
+      // axios
+      //   .post(
+      //     `http://localhost:5000/NgCar/MerageAnaExcelData/updateMerage/${user.personalnumber}`,
+      //     excelDataMerage
+      //   )
+      //   .then((responseData) => {
+      //     setData({
+      //       ...data,
+      //       // work_id: res.data,
+      //       loading: false,
+      //       error: false,
+      //       errorFile: false,
+      //       successmsg: true,
+      //       NavigateToReferrer: false,
+      //     });
+      //     console.log(responseData.data);
+      //   })
+      //   .catch((error) => {
+      //     // console.log(error);
+      //     setData({
+      //       ...data,
+      //       errortype: error.response,
+      //       loading: false,
+      //       error: true,
+      //       errorFile: false,
+      //       NavigateToReferrer: false,
+      //     });
+      //   });
+      // }
+
+      // console.log(responsePN.data);
+      // });
+
+      // .catch((error) => {
+      //   // console.log(error);
+      //   setData({
+      //     ...data,
+      //     errortype: error.response,
+      //     loading: false,
+      //     error: true,
+      //     errorFile: false,
+      //     NavigateToReferrer: false,
+      //   });
+      // });
+
       console.log(requestData);
       axios
-        .post(`http://localhost:5000/hozlaRequests/add`, requestData)
+        .post(`http://localhost:5000/NgCar/requsest/add`, requestData)
         .then((response) => {
           setData({
             ...data,

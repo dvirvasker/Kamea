@@ -114,7 +114,7 @@ const ToraHeilitFieldReuestFormDB = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/hozlaRequests/${params.formID}`)
+      .get(`http://localhost:5000/NgCar/requsest/${params.formID}`)
       .then((response) => {
         // console.log(`the object data`);
         console.log(response.data);
@@ -129,7 +129,7 @@ const ToraHeilitFieldReuestFormDB = () => {
         // console.log(toraHeilitVolume);
         // setClientNote(response.data.clientNote.split("\n"));
         axios
-          .get(`http://localhost:5000/hozlaRequests/sameRequest/${params.formID}`)
+          .get(`http://localhost:5000/NgCar/requsest/sameRequest/${params.formID}`)
           .then((res) => {
             console.log(res.data);
             setText({
@@ -347,7 +347,7 @@ const ToraHeilitFieldReuestFormDB = () => {
     console.log(newStatus);
 
     axios
-      .post(`http://localhost:5000/hozlaRequests/statusUpdate/${params.formID}`, {
+      .post(`http://localhost:5000/NgCar/requsest/statusUpdate/${params.formID}`, {
         status: newStatus,
       })
       .then((response) => {
@@ -377,7 +377,7 @@ const ToraHeilitFieldReuestFormDB = () => {
       fullNameReciver: data.fullNameReciver,
     };
     axios
-      .post(`http://localhost:5000/hozlaRequests/updateNameReciver/${params.formID}`, NameReciver)
+      .post(`http://localhost:5000/NgCar/requsest/updateNameReciver/${params.formID}`, NameReciver)
       .then((response) => {
         // console.groupCollapsed(`handleStatusChange -------- Axios.then`);
         // console.log(response.data);
@@ -413,7 +413,7 @@ const ToraHeilitFieldReuestFormDB = () => {
       toraHeilitVolumes: JSON.stringify(toraHeilitVolume),
     };
     axios
-      .post(`http://localhost:5000/hozlaRequests/updateNumVolume/${params.formID}`, updateNumVol)
+      .post(`http://localhost:5000/NgCar/requsest/updateNumVolume/${params.formID}`, updateNumVol)
       .then((response) => {
         // console.groupCollapsed(`handleStatusChange -------- Axios.then`);
         // console.log(response.data);

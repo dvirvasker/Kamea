@@ -86,7 +86,7 @@ export default function data() {
 
   // useEffect(() => {
   //   axios
-  //     .get(`http://localhost:5000/hozlaRequests/personalnumber`, {
+  //     .get(`http://localhost:5000/NgCar/requsest/personalnumber`, {
   //       params: {
   //         personalnumber: user.personalnumber,
   //       },
@@ -103,7 +103,7 @@ export default function data() {
   useEffect(() => {
     console.log(user.personalnumber);
     // axios
-    //   .get(`http://localhost:5000/hozlaRequests/requestByPersonalnumber/${user.personalnumber}`)
+    //   .get(`http://localhost:5000/NgCar/requsest/requestByPersonalnumber/${user.personalnumber}`)
     //   .then((response) => {
     //     console.log(response.data);
     //     setRequestDB(response.data);
@@ -113,7 +113,7 @@ export default function data() {
     //     setIsError(true);
     //   });
     axios
-      .get(`http://localhost:5000/hozlaRequests/${params.formID}`)
+      .get(`http://localhost:5000/NgCar/requsest/${params.formID}`)
       .then((response) => {
         // console.log(`the object data`);
         console.log(JSON.parse(response.data.dataFile));

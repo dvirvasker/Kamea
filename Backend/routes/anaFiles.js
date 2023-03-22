@@ -93,6 +93,7 @@ router.route("/add").post((req, res) => {
   const rangeOfDates = req.body.rangeOfDates;
   const dataFile = req.body.dataFile;
   const propPrints = req.body.propPrints;
+  const fileName = req.body.fileName;
 
   const newHozlaRequest = new HozlaRequest({
     typeRequest,
@@ -122,6 +123,7 @@ router.route("/add").post((req, res) => {
     clientNote,
     toraHeilitVolumes,
     propPrints,
+    fileName,
   });
 
   const formId = newHozlaRequest.save((err, form) => {
@@ -203,6 +205,7 @@ router.route("/update/:id").post((req, res) => {
       request.propPrints = req.body.propPrints;
       request.rangeOfDates = req.body.rangeOfDates;
       request.dataFile = req.body.dataFile;
+      request.fileName = req.body.fileName;
 
       request
         .save()

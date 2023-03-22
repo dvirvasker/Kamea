@@ -85,7 +85,7 @@ function Dashboard() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/hozlaRequests/getCountStatus`)
+      .get(`http://localhost:5000/NgCar/requsest/getCountStatus`)
       .then((responseStatus) => {
         console.log(responseStatus.data);
         setRequestDB(responseStatus.data);

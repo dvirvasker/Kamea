@@ -51,11 +51,14 @@ app.use("/api", userRoutes);
 
 //Hozla Requests routes for Client
 const AnaFiles = require("./routes/AnaFiles");
-app.use("/hozlaRequests", AnaFiles);
+app.use("/NgCar/requsest", AnaFiles);
+
+const MerageAnaExcelData = require("./routes/merageAnaExcelData");
+app.use("/NgCar/MerageAnaExcelData", MerageAnaExcelData);
 
 // Hozla Requests routes for admin
-const hozlaAdminRequestsRouter = require("./routes/hozlaAdminRequests");
-app.use("/hozlaAdminRequests", hozlaAdminRequestsRouter);
+// const hozlaAdminRequestsRouter = require("./routes/hozlaAdminRequests");
+// app.use("/hozlaAdminRequests", hozlaAdminRequestsRouter);
 
 // //user routes
 // const authRoutes = require("./routes/authentication/auth");
@@ -68,12 +71,12 @@ const fileuploaderRoutes = require("./routes/fileuploader/fileuploader");
 app.use("/api", fileuploaderRoutes);
 
 // Annual Info Admin
-const AnnualInfoAdmin = require("./routes/AnnualInfoAdmin");
-app.use("/AnnualInfoAdmin", AnnualInfoAdmin);
+// const AnnualInfoAdmin = require("./routes/AnnualInfoAdmin");
+// app.use("/AnnualInfoAdmin", AnnualInfoAdmin);
 
 // Tora Heilit
-const toraHeilit = require("./routes/toraHeilit");
-app.use("/toraHeilit", toraHeilit);
+// const toraHeilit = require("./routes/toraHeilit");
+// app.use("/toraHeilit", toraHeilit);
 
 if (process.env.NODE_ENV === "production") {
   //set static folder

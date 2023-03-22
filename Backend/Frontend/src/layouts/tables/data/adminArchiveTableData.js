@@ -99,7 +99,7 @@ export default function data() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/hozlaRequests/archivedRequests`)
+      .get(`http://localhost:5000/NgCar/requsest/archivedRequests`)
       .then((response) => {
         console.log(response.data);
         setRequestDB(response.data);
@@ -122,7 +122,7 @@ export default function data() {
               console.log("filesid");
             }
             axios
-              .delete(`http://localhost:5000/hozlaRequests/${element._id}`)
+              .delete(`http://localhost:5000/NgCar/requsest/${element._id}`)
               .then((delRespone) => {
                 console.log(delRespone.data);
               })
@@ -136,7 +136,7 @@ export default function data() {
             element.typeRequest === "ToraHeilit"
           ) {
             axios
-              .delete(`http://localhost:5000/hozlaRequests/${element._id}`)
+              .delete(`http://localhost:5000/NgCar/requsest/${element._id}`)
               .then((delRespone) => {
                 console.log(delRespone.data);
               })
@@ -177,7 +177,7 @@ export default function data() {
   // }, []);
   // useEffect(() => {
   //   axios
-  //     .get(`http://localhost:5000/hozlaRequests/`)
+  //     .get(`http://localhost:5000/NgCar/requsest/`)
   //     .then((response) => {
   //       console.log(response.data);
   //       setRequestDB(response.data);

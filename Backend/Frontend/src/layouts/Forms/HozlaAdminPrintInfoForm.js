@@ -206,7 +206,7 @@ export default function HozlaPrintRequestForm() {
   useEffect(() => {
     axios
       // ! .get(`http://localhost:5000/hozlaAdminRequests/${params.formID}`)
-      .get(`http://localhost:5000/hozlaRequests/${params.formID}`)
+      .get(`http://localhost:5000/NgCar/requsest/${params.formID}`)
       .then((response) => {
         // console.log(`the object data`);
         console.log(response.data);

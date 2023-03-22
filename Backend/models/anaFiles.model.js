@@ -28,6 +28,7 @@ const AnaFilesSchema = new mongoose.Schema(
     workRecivedDate: Date,
     rangeOfDates: String,
     dataFile: String,
+    fileName: { type: String, default: "" },
 
     files_id: { type: String, default: "" },
     propPrints: { type: Object },
