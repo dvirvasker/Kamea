@@ -14,6 +14,7 @@
 /* eslint-disable import/newline-after-import */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-unused-vars */
+
 // TODO check mult-files
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -90,6 +91,7 @@ import * as XLSX from "xlsx";
 // user and auth import
 import { signin, authenticate, isAuthenticated } from "auth/index";
 import excelANAExample from "../../assets/images/excelANAExample.png";
+// import { merge2Fiels } from "merageJasonExcelFiels";
 const { user } = isAuthenticated();
 
 // console.log("Hozla Print Request Form");
@@ -97,6 +99,8 @@ const { user } = isAuthenticated();
 
 export default function HozlaPrintRequestForm() {
   const currentDate = new Date();
+  // const newDataFile = {};
+  // const dbDataFile = {};
   console.log(currentDate);
   let dateString = "";
   let minDateString = "";
@@ -206,6 +210,7 @@ export default function HozlaPrintRequestForm() {
   const [files, setFiles] = useState([]);
   const [open, setOpen] = React.useState(false);
   const { getRootProps, getInputProps } = useDropzone({});
+  const [getDataMergeFiles, setGetDataMergeFiles] = useState();
   const inputRef = React.useRef(null);
 
   const textPlaceHolderInputs = [
@@ -231,6 +236,17 @@ export default function HozlaPrintRequestForm() {
     // Update the document title using the browser API
     console.log(`You upload ${files.length} files`);
   });
+  const calDate = (value) => {
+    const [dateValues, timeValues] = value?.split(" ") || "  " || "   " || ` ` || [];
+    const [day, month, year] = dateValues.split("/");
+    const [hours, minutes, seconds] = timeValues.split(":");
+    // console.log("date");
+    // console.log(day, month, year);
+    // console.log(hours, minutes, seconds);
+    const date = new Date(+year, month - 1, +day, +hours, +minutes, +seconds);
+    // console.log(date[Symbol.toPrimitive]("number"));
+    return date[Symbol.toPrimitive]("number");
+  };
 
   const handleUploadFiles = (uploadFiles) => {
     const uploaded = [...files];
@@ -328,7 +344,7 @@ export default function HozlaPrintRequestForm() {
     promise.then((d) => {
       if (d[0]["היסטוריית אירועים"]) {
         console.log(d[0]["היסטוריית אירועים"]);
-        setData({ ...data, rangeOfDates: d[0]["היסטוריית אירועים"], dataFile: d });
+        setData({ ...data, rangeOfDates: d[0]["היסטוריית אירועים"], dataFile: d.slice(2) });
       } else {
         let flag = true;
         const ErrorReason = [];
@@ -517,112 +533,113 @@ export default function HozlaPrintRequestForm() {
     axios.post("http://localhost:5000/api/multipleFiles", formFilesData, {}).then((res) => {
       console.log("from the file axios");
       console.log(res.data);
-      const requestData = {
-        // typeRequest: "HozlaRequest",
-        // unit: data.unit,
-        // anaf: data.anaf,
-        // mador: data.mador,
 
-        // workName: data.workName,
-        // workClearance: data.workClearance,
-        // bindingType: data.bindingType,
-        // bindingTypeOther: data.bindingTypeOther,
-        // // copyType: data.copyType,
-        numOfCopyies: data.numOfCopyies,
-
-        // phoneNumber: data.phoneNumber,
-        // fullNameAsker: data.fullNameAsker,
-        workGivenDate: data.workGivenDate,
-        fileName: files[0].name,
-
-        // fullNameReciver: data.fullNameReciver,
-        // fullNameTakein: data.fullNameTakein,
-        workRecivedDate: data.workRecivedDate,
-
-        personalnumber: data.personalnumber,
-        dataFile: JSON.stringify(data.dataFile),
-        rangeOfDates: data.rangeOfDates,
-        // role: data.role,
-
-        // files: data.files,
-        files_id: res.data,
-        // propPrints: JSON.stringify(propPrint),
-        // pageType: data.pageType,
-        // ordernum: data.ordernum,
-        // clientNote: data.clientNote,
-      };
-      const excelDataMerage = {
+      const excelData = {
         // numPages: 1,
         personalnumber: data.personalnumber,
-        excelDataMerage: JSON.stringify(data.dataFile),
+        excelDataMerage: data.dataFile,
       };
       // const personalnumber = {
       //   personalnumber: data.personalnumber,
       // };
+      const newDataFile = data.dataFile;
+      // console.log("newDataFile");
+      console.log(newDataFile);
 
-      // axios
-      //   .get(`http://localhost:5000/NgCar/MerageAnaExcelData/requestBy/${data.personalnumber}`)
-      //   .then((responsePN) => {
-      //     if (responsePN === null) {
       axios
-        .post(`http://localhost:5000/NgCar/MerageAnaExcelData/add`, excelDataMerage)
-        .then((responseData) => {
-          setData({
-            ...data,
-            // work_id: res.data,
-            loading: false,
-            error: false,
-            errorFile: false,
-            successmsg: true,
-            NavigateToReferrer: false,
-          });
-          console.log(responseData.data);
-        })
-        .catch((error) => {
-          // console.log(error);
-          setData({
-            ...data,
-            errortype: error.response,
-            loading: false,
-            error: true,
-            errorFile: false,
-            NavigateToReferrer: false,
-          });
+        .get(`http://localhost:5000/NgCar/MerageAnaExcelData/getDataMergeFiles`)
+        .then((responsePN) => {
+          console.log(responsePN.data);
+          if (responsePN.data.length === 0) {
+            axios
+              .post(`http://localhost:5000/NgCar/MerageAnaExcelData/add`, excelData)
+              .then((responseData) => {
+                setData({
+                  ...data,
+                  // work_id: res.data,
+                  fileName: files[0].name,
+                  loading: false,
+                  error: false,
+                  errorFile: false,
+                  successmsg: true,
+                  NavigateToReferrer: false,
+                });
+                console.log(responsePN.data);
+              })
+              .catch((error) => {
+                // console.log(error);
+                setData({
+                  ...data,
+                  errortype: error.response,
+                  loading: false,
+                  error: true,
+                  errorFile: false,
+                  NavigateToReferrer: false,
+                });
+              });
+          } else {
+            // setGetDataMergeFiles({
+            //   ...data.dataFile,
+            //   ...JSON.stringify(responsePN.data[0].excelDataMerage),
+            // });
+            // console.log(responsePN.data[0].excelDataMerage);
+            // if()
+            const dbDataFile = responsePN.data[0].excelDataMerage;
+            const updateDataFile = newDataFile.concat(dbDataFile);
+            const uniqueData = Array.from(new Set(updateDataFile.map(JSON.stringify))).map(
+              JSON.parse
+            );
+            /* eslint no-underscore-dangle: 0 */
+            uniqueData.sort((el1, el2) => calDate(el1.__EMPTY_7) - calDate(el2.__EMPTY_7));
+
+            console.log("updateDataFile");
+            console.log(updateDataFile);
+            const excelDataMerage = {
+              // numPages: 1,
+              personalnumber: data.personalnumber,
+              excelDataMerage: uniqueData,
+            };
+            axios
+              .post(`http://localhost:5000/NgCar/MerageAnaExcelData/updateMerage`, excelDataMerage)
+              .then((responseData) => {
+                setData({
+                  ...data,
+                  // work_id: res.data,
+                  fileName: files[0].name,
+                  loading: false,
+                  error: false,
+                  errorFile: false,
+                  successmsg: true,
+                  NavigateToReferrer: false,
+                });
+
+                // console.log(responseData);
+              })
+              .catch((error) => {
+                // console.log(error);
+                setData({
+                  ...data,
+                  errortype: error.response,
+                  loading: false,
+                  error: true,
+                  errorFile: false,
+                  NavigateToReferrer: false,
+                });
+              });
+          }
         });
-      //     } else {
-      // axios
-      //   .post(
-      //     `http://localhost:5000/NgCar/MerageAnaExcelData/updateMerage/${user.personalnumber}`,
-      //     excelDataMerage
-      //   )
-      //   .then((responseData) => {
-      //     setData({
-      //       ...data,
-      //       // work_id: res.data,
-      //       loading: false,
-      //       error: false,
-      //       errorFile: false,
-      //       successmsg: true,
-      //       NavigateToReferrer: false,
-      //     });
-      //     console.log(responseData.data);
-      //   })
-      //   .catch((error) => {
-      //     // console.log(error);
-      //     setData({
-      //       ...data,
-      //       errortype: error.response,
-      //       loading: false,
-      //       error: true,
-      //       errorFile: false,
-      //       NavigateToReferrer: false,
-      //     });
-      //   });
-      // }
+      const requestData = {
+        numOfCopyies: data.numOfCopyies,
+        workGivenDate: data.workGivenDate,
+        fileName: files[0].name,
 
-      // console.log(responsePN.data);
-      // });
+        workRecivedDate: data.workRecivedDate,
 
+        personalnumber: data.personalnumber,
+        dataFile: data.dataFile,
+        rangeOfDates: data.rangeOfDates,
+        files_id: res.data,
+      };
       // .catch((error) => {
       //   // console.log(error);
       //   setData({
@@ -642,6 +659,7 @@ export default function HozlaPrintRequestForm() {
           setData({
             ...data,
             work_id: res.data,
+            fileName: files[0].name,
             loading: false,
             error: false,
             errorFile: false,
@@ -831,7 +849,7 @@ export default function HozlaPrintRequestForm() {
             color="white"
             mt={1}
           >
-            מספר אסמכתא: {/* {data.work_id} */} {parseInt(data.work_id.slice(-4), 36)}
+            {data.fileName}
           </MDTypography>
         </DialogContent>
       </MDBox>

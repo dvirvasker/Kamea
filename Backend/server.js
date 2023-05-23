@@ -50,11 +50,14 @@ app.use("/api", userRoutes);
 // app.use('/api',fileuploaderRoutes)
 
 //Hozla Requests routes for Client
-const AnaFiles = require("./routes/AnaFiles");
+const AnaFiles = require("./routes/anaFiles");
 app.use("/NgCar/requsest", AnaFiles);
 
 const MerageAnaExcelData = require("./routes/merageAnaExcelData");
 app.use("/NgCar/MerageAnaExcelData", MerageAnaExcelData);
+
+const places = require("./routes/places");
+app.use("/NgCar/places", places);
 
 // Hozla Requests routes for admin
 // const hozlaAdminRequestsRouter = require("./routes/hozlaAdminRequests");

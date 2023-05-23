@@ -10,7 +10,7 @@ const MerageAnaExcelData = new mongoose.Schema(
 
     // numPages: { type: Number, default: 1 },
     personalnumber: { type: String, required: true },
-    excelDataMerage: String,
+    excelDataMerage: [Object],
   },
   { timestamps: true }
 );

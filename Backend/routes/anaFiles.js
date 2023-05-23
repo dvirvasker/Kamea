@@ -2,20 +2,20 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable camelcase */
 const router = require("express").Router();
-const HozlaRequest = require("../models/anaFiles.model");
+const AnaFiles = require("../models/anaFiles.model");
 const { upload } = require("../helpers/filehelper");
 const MultipleFile = require("../models/fileuploader/multipleFile");
 // const referenceId = 1;
 
 router.route("/").get((req, res) => {
-  HozlaRequest.find()
+  AnaFiles.find()
     .sort({ status: 1, createdAt: -1 })
     .then((request) => res.json(request))
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
 router.route("/activeRequests").get((req, res) => {
-  HozlaRequest.find({ status: { $lte: 100 } })
+  AnaFiles.find({ status: { $lte: 100 } })
     .sort({ createdAt: -1 })
     .exec()
     .then((request) => res.json(request))
@@ -23,7 +23,7 @@ router.route("/activeRequests").get((req, res) => {
 });
 
 router.route("/archivedRequests").get((req, res) => {
-  HozlaRequest.find({ status: { $gte: 125 } })
+  AnaFiles.find({ status: { $gte: 125 } })
     .sort({ createdAt: -1 })
     .exec()
     .then((request) => res.json(request))
@@ -36,7 +36,7 @@ router.route("/getCountStatus").get((req, res) => {
   let inprint = 0;
   let readyForTakeIn = 0;
   // let archive = 0;
-  HozlaRequest.find()
+  AnaFiles.find()
     .then((request) =>
       //  res.json(request)
       {
@@ -91,11 +91,37 @@ router.route("/add").post((req, res) => {
   const clientNote = String(req.body.clientNote);
   const toraHeilitVolumes = req.body.toraHeilitVolumes;
   const rangeOfDates = req.body.rangeOfDates;
-  const dataFile = req.body.dataFile;
+
   const propPrints = req.body.propPrints;
   const fileName = req.body.fileName;
 
-  const newHozlaRequest = new HozlaRequest({
+  // const dataFile = req.body.dataFile;
+
+  const excelDataArray = [];
+  console.log(req.body.excelDataMerage);
+  req.body.dataFile.forEach((element) => {
+    const excelData = {
+      ["היסטוריית אירועים"]: element["היסטוריית אירועים"],
+      __EMPTY: element.__EMPTY,
+      __EMPTY_1: element.__EMPTY_1,
+      __EMPTY_2: element.__EMPTY_2,
+      __EMPTY_3: element.__EMPTY_3,
+      __EMPTY_4: element.__EMPTY_4,
+      __EMPTY_5: element.__EMPTY_5,
+      __EMPTY_6: element.__EMPTY_6,
+      __EMPTY_7: element.__EMPTY_7,
+      __EMPTY_8: element.__EMPTY_8,
+      __EMPTY_9: element.__EMPTY_9,
+      __EMPTY_10: element.__EMPTY_10,
+      __EMPTY_11: element.__EMPTY_11,
+      __EMPTY_12: element.__EMPTY_12,
+    };
+    excelDataArray.push(excelData);
+  });
+
+  const dataFile = excelDataArray;
+
+  const newAnaFiles = new AnaFiles({
     typeRequest,
     rangeOfDates,
     dataFile,
@@ -126,7 +152,7 @@ router.route("/add").post((req, res) => {
     fileName,
   });
 
-  const formId = newHozlaRequest.save((err, form) => {
+  const formId = newAnaFiles.save((err, form) => {
     if (err) {
       return res.status(400).json("Error: " + err);
     } else {
@@ -140,13 +166,13 @@ router.route("/requestByPersonalnumber/:personalnumber").get((req, res) => {
   // console.log(req.params);
   const personalnumber = req.params.personalnumber;
   // const personalnumber = "7654321";
-  HozlaRequest.find({ personalnumber: personalnumber })
+  AnaFiles.find({ personalnumber: personalnumber })
     .then((request) => res.json(request))
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
 router.route("/:id").get((req, res) => {
-  HozlaRequest.findById(req.params.id)
+  AnaFiles.findById(req.params.id)
     .then((request) => res.json(request))
     .catch((err) => res.status(400).json("Error: " + err));
 });
@@ -156,27 +182,32 @@ router.route("/getExcelData/:formid").get((req, res) => {
   let excelData = "";
   let rangeOfDates = "";
   let createdAt = "";
-  HozlaRequest.findById(req.params.formid)
+  // let amountOfAlertsNum = 1;
+
+  AnaFiles.findById(req.params.formid)
     .then((request) => {
       // res.json(JSON.stringify(request.dataFile));
       excelData = request.dataFile;
       rangeOfDates = request.rangeOfDates;
       createdAt = request.createdAt;
-      console.log(request.dataFile);
-      console.log(request.rangeOfDates);
+      // console.log(request.dataFile);
+      // console.log(request.rangeOfDates);
+      // request.dataFile.forEach((element) => {
+      //   amountOfAlertsNum += 1;
+      // });
     })
     .then(() => res.json({ createdAt, excelData, rangeOfDates }))
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
-router.route("/:id").delete((req, res) => {
-  HozlaRequest.findByIdAndDelete(req.params.id)
-    .then(() => res.json("HozlaRequest deleted."))
+router.route("/deleteUploadFile/:id").delete((req, res) => {
+  AnaFiles.findByIdAndDelete(req.params.id)
+    .then(() => res.json("AnaFiles deleted."))
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
 router.route("/update/:id").post((req, res) => {
-  HozlaRequest.findById(req.params.id)
+  AnaFiles.findById(req.params.id)
     .then((request) => {
       request.typeRequest = req.body.typeRequest;
       request.user_card_number = req.body.user_card_number;
@@ -204,34 +235,58 @@ router.route("/update/:id").post((req, res) => {
       request.personalnumber = req.body.personalnumber;
       request.propPrints = req.body.propPrints;
       request.rangeOfDates = req.body.rangeOfDates;
-      request.dataFile = req.body.dataFile;
+      // request.dataFile = req.body.dataFile;
       request.fileName = req.body.fileName;
+
+      const excelDataArray = [];
+      console.log(req.body.excelDataMerage);
+      req.body.dataFile.forEach((element) => {
+        const excelData = {
+          ["היסטוריית אירועים"]: element["היסטוריית אירועים"],
+          __EMPTY: element.__EMPTY,
+          __EMPTY_1: element.__EMPTY_1,
+          __EMPTY_2: element.__EMPTY_2,
+          __EMPTY_3: element.__EMPTY_3,
+          __EMPTY_4: element.__EMPTY_4,
+          __EMPTY_5: element.__EMPTY_5,
+          __EMPTY_6: element.__EMPTY_6,
+          __EMPTY_7: element.__EMPTY_7,
+          __EMPTY_8: element.__EMPTY_8,
+          __EMPTY_9: element.__EMPTY_9,
+          __EMPTY_10: element.__EMPTY_10,
+          __EMPTY_11: element.__EMPTY_11,
+          __EMPTY_12: element.__EMPTY_12,
+        };
+        excelDataArray.push(excelData);
+      });
+
+      request.dataFile = excelDataArray;
 
       request
         .save()
-        .then(() => res.json("HozlaRequest updated!"))
+        .then(() => res.json("AnaFiles updated!"))
         .catch((err) => res.status(400).json("Error: " + err));
     })
     .catch((err) => res.status(400).json("Error: " + err));
 });
 router.route("/updateNameReciver/:id").post((req, res) => {
-  HozlaRequest.findById(req.params.id)
+  AnaFiles.findById(req.params.id)
     .then((request) => {
       request.fullNameReciver = req.body.fullNameReciver;
       request
         .save()
-        .then(() => res.json("HozlaRequest updated!"))
+        .then(() => res.json("AnaFiles updated!"))
         .catch((err) => res.status(400).json("Error: " + err));
     })
     .catch((err) => res.status(400).json("Error: " + err));
 });
 router.route("/updateNumVolume/:id").post((req, res) => {
-  HozlaRequest.findById(req.params.id)
+  AnaFiles.findById(req.params.id)
     .then((request) => {
       request.toraHeilitVolumes = req.body.toraHeilitVolumes;
       request
         .save()
-        .then(() => res.json("HozlaRequest updated!"))
+        .then(() => res.json("AnaFiles updated!"))
         .catch((err) => res.status(400).json("Error: " + err));
     })
     .catch((err) => res.status(400).json("Error: " + err));
@@ -255,7 +310,7 @@ router.route("/sameRequest/:id").get((req, res) => {
   };
   // let message = "";
   // var unit = "";
-  HozlaRequest.findById(req.params.id)
+  AnaFiles.findById(req.params.id)
     .then((request) => {
       const unitName = request.unit;
       const dataToraHeilit = request.toraHeilitVolumes;
@@ -267,7 +322,7 @@ router.route("/sameRequest/:id").get((req, res) => {
       let message = false;
       // console.log(unitName);
       // console.log(dataToraHeilit);
-      HozlaRequest.find({ unit: unitName, toraHeilitVolumes: dataToraHeilit })
+      AnaFiles.find({ unit: unitName, toraHeilitVolumes: dataToraHeilit })
         .then((requestData) => {
           requestData.map((tora) => {
             const day = tora.workGivenDate.getDate();
@@ -311,7 +366,7 @@ router.route("/statusUpdate/:id").post((req, res) => {
   // console.groupCollapsed(`handleStatusChange -------- Axios.then`);
   // console.log(req.params.id);
 
-  HozlaRequest.findById(req.params.id)
+  AnaFiles.findById(req.params.id)
     .then((request) => {
       // console.log(request.status);
       request.status = Number(req.body.status);
@@ -322,7 +377,7 @@ router.route("/statusUpdate/:id").post((req, res) => {
       // }
       request
         .save()
-        .then(() => res.json("HozlaRequest status updated!"))
+        .then(() => res.json("AnaFiles status updated!"))
         .catch((err) => {
           // console.log(err);
 
@@ -332,5 +387,9 @@ router.route("/statusUpdate/:id").post((req, res) => {
     .catch((err) => res.status(400).json("Error: " + err));
   console.groupEnd();
 });
+
+// router.route("/deleteUploadFile/:id").delete((req, res) => {
+
+// });
 
 module.exports = router;

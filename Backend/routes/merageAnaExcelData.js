@@ -5,7 +5,7 @@ const router = require("express").Router();
 const AnaExcelData = require("../models/merageAnaExcelData.model");
 
 router.route("/").get((req, res) => {
-  AnaExcelData.find()
+  AnaExcelData.findOne()
     .sort({ status: 1, createdAt: -1 })
     .then((request) => res.json(request))
     .catch((err) => res.status(400).json("Error: " + err));
@@ -15,7 +15,29 @@ router.route("/add").post((req, res) => {
   console.log(req.body);
   const numPages = req.body.numPages;
   const personalnumber = req.body.personalnumber;
-  const excelDataMerage = req.body.excelDataMerage;
+
+  const excelDataArray = [];
+  console.log(req.body.excelDataMerage);
+  req.body.excelDataMerage.forEach((element) => {
+    const excelData = {
+      __EMPTY: element.__EMPTY,
+      __EMPTY_1: element.__EMPTY_1,
+      __EMPTY_2: element.__EMPTY_2,
+      __EMPTY_3: element.__EMPTY_3,
+      __EMPTY_4: element.__EMPTY_4,
+      __EMPTY_5: element.__EMPTY_5,
+      __EMPTY_6: element.__EMPTY_6,
+      __EMPTY_7: element.__EMPTY_7,
+      __EMPTY_8: element.__EMPTY_8,
+      __EMPTY_9: element.__EMPTY_9,
+      __EMPTY_10: element.__EMPTY_10,
+      __EMPTY_11: element.__EMPTY_11,
+      __EMPTY_12: element.__EMPTY_12,
+    };
+    excelDataArray.push(excelData);
+  });
+
+  const excelDataMerage = excelDataArray;
 
   const newAnaExcelData = new AnaExcelData({
     numPages,
@@ -32,20 +54,20 @@ router.route("/add").post((req, res) => {
   });
 });
 
-router.route("/requestBy/:personalnumber").get((req, res) => {
-  // console.log(req.body);
+router.route("/getDataMergeFiles").get((req, res) => {
   // console.log(req.params);
-  const personalnumber = req.params.personalnumber;
+  // console.log(req.params);
+  // const personalnumber = req.params.personalnumber;
   // const personalnumber = "7654321";
-  AnaExcelData.findOne({ personalnumber: personalnumber })
+  AnaExcelData.find()
     .then((request) => res.json(request))
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
-router.route("/updateMerage/:personalnumber").post((req, res) => {
+router.route("/updateMerage").post((req, res) => {
   console.log(req.body);
-  const personalnumber = req.params.personalnumber;
-  AnaExcelData.find({ personalnumber: personalnumber })
+  // const personalnumber = req.body.personalnumber;
+  AnaExcelData.findOneAndUpdate()
     .then((request) => {
       //   request.user_card_number = req.body.user_card_number;
       //   request.numPages = req.body.numPages;
@@ -64,8 +86,32 @@ router.route("/update/:id").post((req, res) => {
     .then((request) => {
       request.user_card_number = req.body.user_card_number;
       //   request.numPages = req.body.numPages;
-      request.excelDataMerage = req.body.excelDataMerage;
+      // request.excelDataMerage = req.body.excelDataMerage;
       request.numPages = req.body.numPages;
+
+      const excelDataArray = [];
+      console.log(req.body.excelDataMerage);
+      req.body.excelDataMerage.forEach((element) => {
+        const excelData = {
+          __EMPTY: element.__EMPTY,
+          __EMPTY_1: element.__EMPTY_1,
+          __EMPTY_2: element.__EMPTY_2,
+          __EMPTY_3: element.__EMPTY_3,
+          __EMPTY_4: element.__EMPTY_4,
+          __EMPTY_5: element.__EMPTY_5,
+          __EMPTY_6: element.__EMPTY_6,
+          __EMPTY_7: element.__EMPTY_7,
+          __EMPTY_8: element.__EMPTY_8,
+          __EMPTY_9: element.__EMPTY_9,
+          __EMPTY_10: element.__EMPTY_10,
+          __EMPTY_11: element.__EMPTY_11,
+          __EMPTY_12: element.__EMPTY_12,
+        };
+        excelDataArray.push(excelData);
+      });
+
+      request.excelDataMerage = excelDataArray;
+
       request
         .save()
         .then(() => res.json("excelDataMerage updated!"))

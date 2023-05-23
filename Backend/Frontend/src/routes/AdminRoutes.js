@@ -53,6 +53,7 @@ import SignUp from "layouts/authentication/sign-up";
 import ManagementHoztla from "layouts/tables/adminManagementTable";
 import AdminArchiveTable from "layouts/tables/adminArchiveTable";
 import ResearchPage from "layouts/Forms/ResearchPage";
+import PlacesPage from "layouts/Forms/PlacesPage";
 import UploadExcelFile from "layouts/Forms/uploadExcelFile";
 import ToraHeilitPrintRequestForm from "layouts/Forms/ToraHeilitPrintRequestForm";
 import ToraHeilitVolumeAdmin from "layouts/Forms/ToraHeilitVolumeAdmin";
@@ -135,6 +136,14 @@ const AdminRoutes = [
     component: <EventDiary />,
   },
   {
+    type: "collapse",
+    name: "חלוקת אזורים",
+    key: "PlacesPage",
+    icon: <Icon fontSize="small">map</Icon>,
+    route: "/PlacesPage",
+    component: <PlacesPage />,
+  },
+  {
     type: "divider",
   },
   {
@@ -160,7 +169,7 @@ const AdminRoutes = [
   // },
   {
     type: "collapse",
-    name: "הקבצים שלי",
+    name: "קבצי ענ''א",
     key: "userRequestsTable",
     icon: <Icon fontSize="small">table_view</Icon>,
     route: "/userRequestsTable",

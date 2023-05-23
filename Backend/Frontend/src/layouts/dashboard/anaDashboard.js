@@ -54,8 +54,13 @@ import OrdersOverview from "layouts/dashboard/components/OrdersOverview";
 import Projects from "layouts/dashboard/components/Projects";
 import Header from "layouts/profile/components/Header";
 import PlatformSettings from "layouts/profile/components/PlatformSettings";
-import { mainExample } from "merageJasonExcelFiels";
+// import { mainExample } from "merageJasonExcelFiels";
 import { useEffect, useMemo, useState } from "react";
+import { useParams } from "react-router-dom";
+import { CSVLink } from "react-csv";
+import * as FileSaver from "file-saver";
+import * as XLSX from "xlsx";
+
 import {
   Card,
   CardBody,
@@ -73,6 +78,8 @@ import {
   Row,
 } from "reactstrap";
 import DashboardHeader from "./components/DashboardHeader";
+// import { ExportToExcel } from "../Forms/ExportToExcel";
+// import CsvIcon from "../../assets/images/icons/csv.png";
 
 function Dashboard() {
   const currentDate = new Date();
@@ -98,7 +105,21 @@ function Dashboard() {
       }-0${currentDate.getDate()}`;
     }
   }
-
+  const monthName = [
+    "Jan. ",
+    "Feb. ",
+    "Mar. ",
+    "Apr. ",
+    "May ",
+    "June ",
+    "July ",
+    "Aug. ",
+    "Sept. ",
+    "Oct. ",
+    "Nov. ",
+    "Dec. ",
+  ];
+  const params = useParams();
   const { sales, tasks } = reportsLineChartData;
   const [tabView, setTabView] = useState(0);
 
@@ -120,7 +141,243 @@ function Dashboard() {
     ploga: "",
     gdod: "",
   });
+  const [excelDataMerage, setexcelDataMerage] = useState({
+    rangeOfDates: "",
+    excelDataMerageFile: "",
+    createdAt: "",
+    minDate: "",
+    maxDate: "",
+    amountOfAlerts: 0,
+    avgTimeToStopCar: 0,
+    zeroTfive: 0,
+    fiveTfifteen: 0,
+    fifteenTthirty: 0,
+    thirtyTplus: 0,
+    eventsAtFault: [],
+    eventsAtFaultNum: 0,
+    eventsAtFaultCount: {},
+    monthArrayName: [],
+    monthArrayCount: 0,
+    firstDate: "",
+    lastDate: "",
+  });
+  const [allDataFromDB, setAllDataFromDB] = useState([]);
+  const headerFile = [
+    // { "היסטוריית אירועים": "01/06/2022 - 31/10/2022" },
+    { label: "#", key: "היסטוריית אירועים" },
+    { label: "קבוצה", key: "__EMPTY" },
+    { label: "אירוע", key: "__EMPTY_1" },
+    { label: "מס' רישוי", key: "__EMPTY_2" },
+    { label: "שם", key: "__EMPTY_3" },
+    { label: "מספר שלדה", key: "__EMPTY_4" },
+    { label: "מודל", key: "__EMPTY_5" },
+    { label: "שנת ייצור", key: "__EMPTY_6" },
+    { label: "זמן התחלה", key: "__EMPTY_7" },
+    { label: "זמן סיום", key: "__EMPTY_8" },
+    { label: "כתובת", key: "__EMPTY_9" },
+    { label: "#2", key: "__EMPTY_10" },
+    { label: "קבוצה3", key: "__EMPTY_11" },
+    { label: "תאריך עדכון", key: "__EMPTY_12" },
+  ];
+  let reszeroTfive = 0;
+  let resfiveTfifteen = 0;
+  let resfifteenTthirty = 0;
+  let resthirtyTplus = 0;
 
+  const calDate = (value) => {
+    const [dateValues, timeValues] = value?.split(" ") || "  " || "   " || ` ` || [];
+    const [day, month, year] = dateValues.split("/");
+    const [hours, minutes, seconds] = timeValues.split(":");
+    // console.log("date");
+    // console.log(day, month, year);
+    // console.log(hours, minutes, seconds);
+    const date = new Date(+year, month - 1, +day, +hours, +minutes, +seconds);
+    // console.log(date[Symbol.toPrimitive]("number"));
+    return date[Symbol.toPrimitive]("number");
+  };
+  const fullDate = (value) => {
+    const [dateValues, timeValues] = value?.split(" ") || "  " || "   " || ` ` || [];
+    // console.log(date[Symbol.toPrimitive]("number"));
+    return dateValues;
+  };
+  const monthDate = (value) => {
+    const [dateValues, timeValues] = value?.split(" ") || "  " || "   " || ` ` || [];
+    const [day, month, year] = dateValues.split("/");
+    const [hours, minutes, seconds] = timeValues.split(":");
+    // console.log("date");
+    // console.log(day, month, year);
+    // console.log(hours, minutes, seconds);
+    const date = new Date(+year, month - 1, +day, +hours, +minutes, +seconds);
+    date[Symbol.toPrimitive]("number");
+    // console.log(date[Symbol.toPrimitive]("number"));
+    return monthName[date.getMonth()];
+  };
+  const yearDate = (value) => {
+    const [dateValues, timeValues] = value?.split(" ") || "  " || "   " || ` ` || [];
+    const [day, month, year] = dateValues.split("/");
+    const [hours, minutes, seconds] = timeValues.split(":");
+    // console.log("date");
+    // console.log(day, month, year);
+    // console.log(hours, minutes, seconds);
+    const date = new Date(+year, month - 1, +day, +hours, +minutes, +seconds);
+    date[Symbol.toPrimitive]("number");
+    // console.log(date[Symbol.toPrimitive]("number"));
+    return year;
+  };
+
+  const responseTime = (resTime) => {
+    if (resTime >= 0 && resTime < 300) {
+      reszeroTfive += 1;
+    } else if (resTime >= 300 && resTime < 900) {
+      resfiveTfifteen += 1;
+    } else if (resTime >= 900 && resTime < 1800) {
+      resfifteenTthirty += 1;
+    } else if (resTime > 1800) {
+      resthirtyTplus += 1;
+    }
+    // setexcelDataMerage({
+    //   ...excelDataMerage,
+    //   zeroTfive: reszeroTfive,
+    //   fiveTfifteen: resfiveTfifteen,
+    //   fifteenTthirty: resfifteenTthirty,
+    //   thirtyTplus: resthirtyTplus,
+    //   // avgTimeToStopCar: avgTimeToStopCarNum,
+    // });
+
+    return [reszeroTfive, resfiveTfifteen, resfifteenTthirty, resthirtyTplus];
+  };
+
+  const time = (startTime, endTime) => {
+    let resTime = 0;
+    let timeArr = [];
+    if (startTime !== null || endTime !== null) {
+      resTime = calDate(startTime) / 1000 - calDate(endTime) / 1000;
+      timeArr = responseTime(resTime);
+    } else {
+      console.log("empty");
+    }
+
+    return timeArr;
+  };
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/NgCar/MerageAnaExcelData/`)
+      .then((response) => {
+        // console.log(`the object data`);
+        console.log(response.data);
+        setAllDataFromDB(response.data.excelDataMerage);
+        let amountOfAlertsNum = 0;
+        let resTime = 0;
+        let firstDate = ``;
+        let lastDate = ``;
+        const result = [];
+        const resultCount = {};
+        const monthCount = [];
+        const monthNameC = [];
+
+        // let reszeroTfive = 0;
+        // let resfiveTfifteen = 0;
+        // let resfifteenTthirty = 0;
+        // let resthirtyTplus = 0;
+        // let avgTimeToStopCarNum = 0;
+        Object.values(response.data.excelDataMerage).forEach((element, index) => {
+          if (index === 0) {
+            firstDate = fullDate(element.__EMPTY_7);
+          }
+          lastDate = fullDate(element.__EMPTY_7);
+          amountOfAlertsNum += 1;
+          // ;
+          console.log(monthDate(element.__EMPTY_7));
+          resultCount[element.__EMPTY_1] = (resultCount[element.__EMPTY_1] || 0) + 1;
+          monthCount[monthDate(element.__EMPTY_7)] =
+            (monthCount[monthDate(element.__EMPTY_7)] || 0) + 1;
+          // response time
+          resTime = time(element.__EMPTY_8, element.__EMPTY_7);
+        });
+        response.data.excelDataMerage.filter((element) => {
+          const isDuplicate = result.includes(element.__EMPTY_1);
+          const isDuplicateMonth = monthNameC.includes(
+            monthDate(element.__EMPTY_7) + yearDate(element.__EMPTY_7)
+          );
+          // console.log(monthDate(element.__EMPTY_7));
+          if (!isDuplicate) {
+            result.push(element.__EMPTY_1);
+
+            return true;
+          }
+          if (!isDuplicateMonth) {
+            monthNameC.push(monthDate(element.__EMPTY_7) + yearDate(element.__EMPTY_7));
+
+            return true;
+          }
+
+          return false;
+        });
+        // response.data.excelDataMerage.forEach((element) => {
+
+        // });
+        console.log(firstDate, lastDate);
+        console.log(monthCount);
+        console.log(monthNameC);
+        // console.log(Object.values(monthCount));
+        console.log(resultCount);
+        console.log(Object.values(resultCount));
+        // response.data.excelDataMerage.find(element => element > 10);
+
+        // 👇️ [{id: 1, name: 'Tom'}, {id: 2, name: 'Nick'}]
+        // console.log(unique);
+        console.log(resTime);
+        console.log(result);
+        setexcelDataMerage({
+          ...excelDataMerage,
+          // rangeOfDates: response.data.rangeOfDates,
+          // createdAt: response.data.createdAt.split("T")[0],
+          // excelDataMerageFile: response.data.dataFile,
+          // minDate: `${response.data.rangeOfDates.split(" - ")[0]}`,
+          // maxDate: `${response.data.rangeOfDates.split(" - ")[1]}`,
+          amountOfAlerts: amountOfAlertsNum,
+          zeroTfive: resTime[0],
+          fiveTfifteen: resTime[1],
+          fifteenTthirty: resTime[2],
+          thirtyTplus: resTime[3],
+          eventsAtFault: result,
+          eventsAtFaultNum: result.length,
+          eventsAtFaultCount: Object.values(resultCount),
+          monthArrayName: monthNameC,
+          monthArrayCount: Object.values(monthCount),
+          firstDate: `${firstDate}`,
+          lastDate: `${lastDate}`,
+          // avgTimeToStopCar: avgTimeToStopCarNum,
+        });
+
+        // setexcelDataMerage(response);
+        // console.log(excelDataMerage);
+        // console.log(params.formID);
+        // console.log(excelDataMerage.minDate);
+        // console.log(excelDataMerage.maxDate);
+        // console.log(excelDataMerage.zeroTfive);
+        // console.log(excelDataMerage.fiveTfifteen);
+
+        // setFormData(response.data);
+        // setdates({
+        //   workGivenDate: response.data.workGivenDate.split("T")[0],
+        //   workRecivedDate: response.data.workRecivedDate.split("T")[0],
+        // });
+        // setClientNote(response.data.clientNote.split("\n"));
+        // setPropPrint(JSON.parse(response.data.propPrints));
+        // console.log(propPrint);
+      })
+      .catch((error) => {
+        console.log(error);
+        console.log(error.code);
+        // if (error.code === "ERR_BAD_REQUEST") {
+        //   setError404(true);
+        // } else {
+        //   setErrorDB(true);
+        // }
+      });
+  }, []);
   // useMemo(() => {
   //   if (typeof window !== "undefined") {
   //     setTabView(JSON.parse(localStorage.getItem("dashboardView")));
@@ -181,6 +438,42 @@ function Dashboard() {
     setData({ ...data, [evt.target.name]: value });
   }
 
+  // function getSheetData(data, header) {
+  //   var fields = Object.keys(data[0]);
+  //   var sheetData = data.map(function (row) {
+  //     return fields.map(function (fieldName) {
+  //       return row[fieldName] ? row[fieldName] : "";
+  //     });
+  //   });
+  //   sheetData.unshift(header);
+  //   return sheetData;
+  // }
+
+  // function saveAsExcel() {
+  //   var data = [
+  //     { name: "John", city: "Seattle" },
+  //     { name: "Mike", city: "Los Angeles" },
+  //     { name: "Zach", city: "New York" },
+  //   ];
+  //   let header = ["Name", "City"];
+
+  //   XlsxPopulate.fromBlankAsync().then(async (workbook) => {
+  //     const sheet1 = workbook.sheet(0);
+  //     const sheetData = getSheetData(data, header);
+  //     const totalColumns = sheetData[0].length;
+
+  //     sheet1.cell("A1").value(sheetData);
+  //     const range = sheet1.usedRange();
+  //     const endColumn = String.fromCharCode(64 + totalColumns);
+  //     sheet1.row(1).style("bold", true);
+  //     sheet1.range("A1:" + endColumn + "1").style("fill", "BFBFBF");
+  //     range.style("border", true);
+  //     return workbook.outputAsync().then((res) => {
+  //       saveAs(res, "file.xlsx");
+  //     });
+  //   });
+  // }
+
   const gdodView = () => (
     <MDBox py={3}>
       <Grid justifyContent="flex-end" alignItems="center" container spacing={3}>
@@ -196,7 +489,7 @@ function Dashboard() {
                     name="minDate"
                     type="date"
                     // label="מ-"
-                    value={data.minDate}
+                    // value={excelDataMerage.firstDate}
                     max={dateString}
                     onChange={handleChange}
                   />
@@ -204,7 +497,7 @@ function Dashboard() {
                     name="maxDate"
                     type="date"
                     // label="עד-"
-                    value={data.maxDate}
+                    // value={excelDataMerage.lastDate}
                     min={data.minDate}
                     // max={dateString}
                     onChange={handleChange}
@@ -225,6 +518,22 @@ function Dashboard() {
             />
           </MDBox>
         </Grid>
+        {/* <Grid container spacing={3}> */}
+        <Grid item xs={12} md={12} lg={6}>
+          <MDBox mb={4}>
+            <ComplexStatisticsCard
+              color="mekatnar"
+              icon="calendar_month"
+              title="טווחי תאריכים"
+              count={`${excelDataMerage.firstDate} - ${excelDataMerage.lastDate}`}
+              percentage={{
+                color: "mekatnar",
+                label: excelDataMerage.createdAt,
+                amount: "הועלה ב ",
+              }}
+            />
+          </MDBox>
+        </Grid>
       </Grid>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6} lg={3}>
@@ -233,7 +542,7 @@ function Dashboard() {
               color="dark"
               icon="access_time"
               title="זמן ממוצע לעצירת רכב"
-              count="20 שניות"
+              count={excelDataMerage.avgTimeToStopCar}
               percentage={{
                 color: "success",
                 amount: "+3%",
@@ -263,7 +572,7 @@ function Dashboard() {
               color="error"
               icon="taxi_alert"
               title="כמות התרעות"
-              count="103"
+              count={excelDataMerage.amountOfAlerts}
               percentage={{
                 color: "success",
                 amount: "",
@@ -278,7 +587,7 @@ function Dashboard() {
               color="error"
               icon="event_busy"
               title="אירועים באשמה"
-              count="23"
+              count={excelDataMerage.eventsAtFaultNum}
               percentage={{
                 color: "success",
                 amount: "",
@@ -314,11 +623,19 @@ function Dashboard() {
                 title="פילוח התרעות"
                 description="התרעות שהיו ברכב"
                 chart={{
-                  labels: ["a", "s"],
+                  labels: excelDataMerage.eventsAtFault,
                   datasets: {
                     label: "פילוח התרעות",
-                    backgroundColors: ["mekatnar", "dark"],
-                    data: [70, 60],
+                    backgroundColors: [
+                      "success",
+                      "mekatnar",
+                      "error",
+                      "primary",
+                      "info",
+                      "secondary",
+                      "dark",
+                    ],
+                    data: excelDataMerage.eventsAtFaultCount,
                   },
                 }}
               />
@@ -385,42 +702,37 @@ function Dashboard() {
                   >
                     <Icon>unfold_more</Icon>
                   </MDButton>
+
                   {gdodshowRepeatedAlerts && (
                     <>
-                      <TimelineItem
-                        color="error"
-                        icon="notifications"
-                        title="$2400 Design changes"
-                        dateTime="22 DEC 7:20 PM"
-                        description="110 High engine temperature"
-                        badges={["design"]}
-                      />
-                      <TimelineItem
-                        color="error"
-                        icon="notifications"
-                        title="New order #1832412"
-                        dateTime="21 DEC 11 PM"
-                        description="Engine temperature is above 115"
-                        badges={["order", "#1832412"]}
-                      />
-                      <TimelineItem
+                      {excelDataMerage.eventsAtFault.map((events, index) => (
+                        <TimelineItem
+                          color="error"
+                          icon="notifications"
+                          title={events}
+                          // dateTime={excelDataMerage.eventsAtFaultCount[index]}
+                          description={`כמות פעמים: ${excelDataMerage.eventsAtFaultCount[index]}`}
+                          badges={["design"]}
+                        />
+                      ))}
+                      {/* <TimelineItem
                         icon="notification_important"
                         title=""
                         dateTime="21 DEC 9:34 PM"
                         description=""
                         badges={["server", "payments"]}
                         lastItem
-                      />
+                      /> */}
                     </>
                   )}
                 </TimelineList>
               }
               date="just updated"
               chart={{
-                labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                labels: excelDataMerage.monthArrayName,
                 datasets: {
                   label: "תקלות חודשיות",
-                  data: [450, 200, 100, 220, 500, 100, 400, 230, 500],
+                  data: excelDataMerage.monthArrayCount,
                 },
               }}
             />
@@ -435,7 +747,12 @@ function Dashboard() {
                 datasets: {
                   label: "",
                   backgroundColors: ["mekatnar", "success", "dark", "error"],
-                  data: [15, 120, 212, 60],
+                  data: [
+                    excelDataMerage.zeroTfive,
+                    excelDataMerage.fiveTfifteen,
+                    excelDataMerage.fifteenTthirty,
+                    excelDataMerage.thirtyTplus,
+                  ],
                 },
               }}
             />
@@ -1834,14 +2151,54 @@ function Dashboard() {
     </MDBox>
   );
 
+  // const ExportToExcel = () => {
+  //   const fileType =
+  //     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+  //   const fileExtension = ".xlsx";
+  //
+  const exportToCSV = () => {
+    const fileType =
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+    const fileExtension = ".xlsx";
+    const fileName = `${excelDataMerage.firstDate} - ${excelDataMerage.lastDate} היסטוריית אירועים`;
+    const ws = XLSX.utils.json_to_sheet(allDataFromDB);
+    const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    const dataExcel = new Blob([excelBuffer], { type: fileType });
+    FileSaver.saveAs(dataExcel, fileName + fileExtension);
+  };
+  // exportToCSV(allDataFromDB, fileName);
+  // };
+
   return (
     <DashboardLayout>
       {/* <DashboardNavbar /> */}
       <DashboardHeader tabViewValue={tabView} setTabViewValue={setTabView} />
-      {mainExample()}
+      {/* {mainExample()} */}
       {/* <MDTypography color="mekatnar" variant="h4" fontWeight="medium">
         {tabView}
       </MDTypography> */}
+
+      {/* <MDButton color="mekatnar" onClick={saveAsExcel}>
+        ייצא קובץ אקסל
+      </MDButton> */}
+      {/* <ExportToExcel
+        apiData={allDataFromDB}
+        fileName={`${excelDataMerage.firstDate} - ${excelDataMerage.lastDate} היסטוריית אירועים`}
+      /> */}
+      <MDBox mx={3}>
+        <MDButton color="mekatnar" onClick={exportToCSV}>
+          יצא קובץ xlsx
+        </MDButton>
+        <CSVLink
+          data={allDataFromDB}
+          headers={headerFile}
+          filename={`${excelDataMerage.firstDate} - ${excelDataMerage.lastDate} היסטוריית אירועים`}
+        >
+          <MDButton color="secondary">ייצא קובץ csv</MDButton>
+        </CSVLink>
+      </MDBox>
+
       {tabView === 0 //* mahlaka view
         ? gdodView()
         : tabView === 1 //* ploga view

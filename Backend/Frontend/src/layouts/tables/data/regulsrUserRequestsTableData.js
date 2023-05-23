@@ -31,8 +31,15 @@ import MDProgress from "components/MDProgress";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import MDButton from "components/MDButton";
-import { Link } from "react-router-dom";
-
+import { Link, Navigate } from "react-router-dom";
+import {
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Modal,
+  Select,
+} from "@mui/material";
 // user and auth import
 import { signin, authenticate, isAuthenticated } from "auth/index";
 
@@ -58,6 +65,13 @@ export default function data() {
   const [requestDB, setRequestDB] = useState([]);
   const [isInfoPressed, setIsInfoPressed] = useState(false);
   const [pressedID, setpressedID] = useState("");
+  const [dataStatus, setDataStatus] = useState({
+    error: false,
+    errorFile: false,
+    successmsg: false,
+    loading: false,
+    NavigateToReferrer: false,
+  });
   const textPlaceHolderInputs = [
     "יחידה",
     "ענף",
@@ -110,6 +124,174 @@ export default function data() {
         setIsError(true);
       });
   }, []);
+  // const handleCloseSuccsecModal = () => {
+  //   setDataStatus({
+  //     ...dataStatus,
+  //     loading: false,
+  //     errorFile: false,
+  //     error: false,
+  //     successmsg: false,
+  //     NavigateToReferrer: true,
+  //   });
+  // };
+  // const handleCloseLoadingModal = () => {
+  //   setDataStatus({ ...dataStatus, loading: false });
+  // };
+  // const handleCloseErrorModal = () => {
+  //   setDataStatus({
+  //     ...dataStatus,
+  //     loading: false,
+  //     error: false,
+  //     errorFile: false,
+  //     successmsg: false,
+  //     NavigateToReferrer: false,
+  //   });
+  // };
+  // const handleCloseErrorFileModal = () => {
+  //   setDataStatus({
+  //     ...dataStatus,
+  //     loading: false,
+  //     error: false,
+  //     errorFile: false,
+  //     successmsg: false,
+  //     NavigateToReferrer: false,
+  //   });
+  // };
+  // // const NavigateUser = () => {
+  // //   if (dataStatus.NavigateToReferrer) {
+  // //     return <Navigate to="/userRequestsTable" />;
+  // //   }
+  // // };
+
+  // const showSuccess = () => (
+  //   <Dialog
+  //     open={dataStatus.successmsg}
+  //     onClose={handleCloseSuccsecModal}
+  //     aria-labelledby="alert-dialog-title"
+  //     aria-describedby="alert-dialog-description"
+  //   >
+  //     <MDBox
+  //       variant="gradient"
+  //       bgColor="mekatnar"
+  //       coloredShadow="mekatnar"
+  //       borderRadius="l"
+  //       // mx={2}
+  //       // mt={2}
+  //       p={3}
+  //       // mb={2}
+  //       textAlign="center"
+  //     >
+  //       <MDTypography variant="h1" fontWeight="medium" color="white" mt={1}>
+  //         הקובץ הועלה
+  //       </MDTypography>
+
+  //       <DialogContent>
+  //         <MDTypography
+  //           onMouseMove={(e) => window.location.reload()}
+  //           variant="h4"
+  //           fontWeight="medium"
+  //           color="white"
+  //           mt={1}
+  //         >
+  //           {dataStatus.fileName}
+  //         </MDTypography>
+  //       </DialogContent>
+  //     </MDBox>
+  //   </Dialog>
+  // );
+  // const showErrorFile = () => (
+  //   <Dialog
+  //     open={dataStatus.errorFile}
+  //     onClose={handleCloseErrorFileModal}
+  //     aria-labelledby="alert-dialog-title"
+  //     aria-describedby="alert-dialog-description"
+  //   >
+  //     <MDBox
+  //       variant="gradient"
+  //       bgColor="error"
+  //       coloredShadow="error"
+  //       borderRadius="l"
+  //       // mx={2}
+  //       // mt={2}
+  //       p={3}
+  //       // mb={2}
+  //       textAlign="center"
+  //     >
+  //       <MDTypography variant="h1" fontWeight="medium" color="white" mt={1}>
+  //         קובץ לא תקין
+  //       </MDTypography>
+
+  //       <DialogContent>
+  //         <MDTypography variant="h6" fontWeight="medium" color="white" mt={1}>
+  //           אנא נסה קובץ תקין ממערכת א
+  //         </MDTypography>
+  //       </DialogContent>
+  //     </MDBox>
+  //   </Dialog>
+  // );
+  // const showError = () => (
+  //   <Dialog
+  //     open={dataStatus.error}
+  //     onClose={handleCloseErrorModal}
+  //     aria-labelledby="alert-dialog-title"
+  //     aria-describedby="alert-dialog-description"
+  //   >
+  //     <MDBox
+  //       variant="gradient"
+  //       bgColor="error"
+  //       coloredShadow="error"
+  //       borderRadius="l"
+  //       // mx={2}
+  //       // mt={2}
+  //       p={3}
+  //       // mb={2}
+  //       textAlign="center"
+  //     >
+  //       <MDTypography variant="h1" fontWeight="medium" color="white" mt={1}>
+  //         שגיאה בהעלאת קבצים
+  //       </MDTypography>
+
+  //       <DialogContent>
+  //         <MDTypography variant="h6" fontWeight="medium" color="white" mt={1}>
+  //           אנא נסה שנית מאוחר יותר
+  //         </MDTypography>
+  //       </DialogContent>
+  //     </MDBox>
+  //   </Dialog>
+  // );
+
+  const deleteUpload = (id) => {
+    axios
+      .delete(`http://localhost:5000/NgCar/requsest/deleteUploadFile/${id}`)
+      .then((responseData) => {
+        setDataStatus({
+          ...dataStatus,
+          // work_id: res.data,
+          // fileName: files[0].name,
+          loading: false,
+          error: false,
+          errorFile: false,
+          successmsg: true,
+          NavigateToReferrer: false,
+        });
+        // window.location.reload();
+        // showSuccess();
+        console.log(responseData);
+        // eslint-disable-next-line no-self-assign
+        window.location.href = window.location.href;
+      })
+      .catch((error) => {
+        console.log(error);
+        setDataStatus({
+          ...dataStatus,
+          errortype: error.response,
+          loading: false,
+          error: true,
+          errorFile: false,
+          NavigateToReferrer: false,
+        });
+      });
+  };
   const Progress = ({ color, value }) => (
     <MDBox display="flex" alignItems="center">
       <MDTypography variant="caption" color="text" fontWeight="medium">
@@ -163,20 +345,20 @@ export default function data() {
     return [typeName, color, urlRequest];
   };
 
-  const dbRows = requestDB.map((hozla, index) => ({
+  const dbRows = requestDB.map((ana, index) => ({
     // project: <Project image={LogoAsana} name="Asana" />,
-    fileID: parseInt(hozla._id.slice(-4), 36),
-    fileName: hozla.fileName,
-    project: hozla.workName,
+    fileID: parseInt(ana._id.slice(-4), 36),
+    fileName: ana.fileName,
+    project: ana.workName,
     clearance:
       // <MDTypography component="a" href="#" variant="button" color="text" fontWeight="medium">
-      clearanceOptions[parseInt(hozla.workClearance, 10)],
+      clearanceOptions[parseInt(ana.workClearance, 10)],
     // </MDTypography>
     typeRequest: (
       <>
         <MDBadge
-          badgeContent={setTypeRequest(hozla.typeRequest)[0]}
-          color={setTypeRequest(hozla.typeRequest)[1]}
+          badgeContent={setTypeRequest(ana.typeRequest)[0]}
+          color={setTypeRequest(ana.typeRequest)[1]}
           size="sm"
           container
         />
@@ -185,20 +367,21 @@ export default function data() {
     status: (
       <>
         <MDTypography component="p" variant="caption" color="text" fontWeight="medium">
-          {getWorkStuts(hozla.status)[0]}
+          {getWorkStuts(ana.status)[0]}
         </MDTypography>
         <Progress
           variant="gradient"
-          color={getWorkStuts(hozla.status)[1]}
-          value={hozla.status >= 125 ? 100 : hozla.status}
+          color={getWorkStuts(ana.status)[1]}
+          value={ana.status >= 125 ? 100 : ana.status}
         />
       </>
     ),
-    NameRequester: hozla.fullNameAsker,
+    NameRequester: ana.fullNameAsker,
+    personalnumber: ana.personalnumber,
     diliveryDate: (
       <>
         <MDBadge
-          badgeContent={hozla.rangeOfDates}
+          badgeContent={ana.rangeOfDates}
           color="secondary"
           size="sm"
           variant="contained"
@@ -206,15 +389,15 @@ export default function data() {
         />
       </>
     ),
-    startDate: hozla.createdAt.split("T")[0],
+    startDate: ana.createdAt.split("T")[0],
     info: (
-      <Link to={`/excelTable/${hozla._id}`} key={hozla._id}>
+      <Link to={`/excelTable/${ana._id}`} key={ana._id}>
         <MDButton
           variant="gradient"
           color="mekatnar"
           // onClick={() => {
           //   // setIsInfoPressed(true);
-          //   // setpressedID(hozla._id);
+          //   // setpressedID(ana._id);
           // }}
           circular="true"
           iconOnly="true"
@@ -225,13 +408,13 @@ export default function data() {
       </Link>
     ),
     statistics: (
-      <Link to={`/AnaOneFile/${hozla._id}`} key={hozla._id}>
+      <Link to={`/AnaOneFile/${ana._id}`} key={ana._id}>
         <MDButton
           variant="gradient"
           color="mekatnar"
           // onClick={() => {
           //   // setIsInfoPressed(true);
-          //   // setpressedID(hozla._id);
+          //   // setpressedID(ana._id);
           // }}
           circular="true"
           iconOnly="true"
@@ -241,6 +424,18 @@ export default function data() {
         </MDButton>
       </Link>
     ),
+    delete: (
+      <MDButton
+        variant="gradient"
+        color="error"
+        onClick={() => deleteUpload(ana._id)}
+        circular="true"
+        iconOnly="true"
+        size="medium"
+      >
+        <Icon>delete</Icon>
+      </MDButton>
+    ),
   }));
   console.log(`isError ${isError}`);
   return {
@@ -249,7 +444,7 @@ export default function data() {
       // { Header: "אסמכתא", accessor: "fileID", align: "center" },
       { Header: "שם הקובץ", accessor: "fileName", align: "center" },
       // { Header: "סוג הבקשה", accessor: "typeRequest", align: "center" },
-      // { Header: "שם המזמין", accessor: "NameRequester", align: "center" },
+      { Header: "מ''א של המעלה", accessor: "personalnumber", align: "center" },
       // { Header: "שם העבודה", accessor: "project", align: "center" },
       // { Header: "סיווג העבודה", accessor: "clearance", align: "center" },
       // { Header: "סטטוס", accessor: "status", align: "center" },
@@ -257,7 +452,8 @@ export default function data() {
       { Header: "היסטוריית אירועים", accessor: "diliveryDate", align: "center" },
       { Header: "פרטי הקובץ", accessor: "info", align: "center" },
       { Header: "סטטיסטיקה", accessor: "statistics", align: "center" },
-      // { Header: "פרטי הוצלא", accessor: "hozlaInfo", align: "center" },
+      { Header: "מחק", accessor: "delete", align: "center" },
+      // { Header: "פרטי הוצלא", accessor: "anaInfo", align: "center" },
     ],
 
     rows: dbRows,
@@ -265,133 +461,3 @@ export default function data() {
     setDBerror: setIsError,
   };
 }
-
-// rows: [
-//   {
-//     // project: <Project image={LogoAsana} name="Asana" />,
-//     project: projectOptions[0],
-//     clearance:
-//       // <MDTypography component="a" href="#" variant="button" color="text" fontWeight="medium">
-//       clearanceOptions[0],
-//     // </MDTypography>
-//     status: (
-//       <>
-//         <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-//           בהדפסה
-//         </MDTypography>
-//         <Progress color="info" value={60} />
-//       </>
-//     ),
-//     completion: <Progress color="info" value={60} />,
-//     additionalInfo: (
-//       <MDTypography component="a" href="#" color="text">
-//         <Icon>info</Icon>
-//       </MDTypography>
-//     ),
-//   },
-//   {
-//     project: projectOptions[1],
-//     clearance: (
-//       <MDTypography component="a" href="#" variant="button" color="text" fontWeight="medium">
-//         {clearanceOptions[2]}
-//       </MDTypography>
-//     ),
-//     status: (
-//       <>
-//         <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-//           בהדפסה
-//         </MDTypography>
-//         <Progress color="info" value={60} />
-//       </>
-//     ),
-//     additionalInfo: (
-//       <MDTypography component="a" href="#" color="text">
-//         <Icon>info</Icon>
-//       </MDTypography>
-//     ),
-//   },
-//   {
-//     project: projectOptions[2],
-//     clearance: (
-//       <MDTypography component="a" href="#" variant="button" color="text" fontWeight="medium">
-//         {clearanceOptions[3]}
-//       </MDTypography>
-//     ),
-//     status: (
-//       <>
-//         <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-//           בהדפסה
-//         </MDTypography>
-//         <Progress color="info" value={60} />
-//       </>
-//     ),
-//     additionalInfo: (
-//       <MDTypography component="a" href="#" color="text">
-//         <Icon>info</Icon>
-//       </MDTypography>
-//     ),
-//   },
-//   {
-//     project: projectOptions[3],
-//     clearance: (
-//       <MDTypography component="a" href="#" variant="button" color="text" fontWeight="medium">
-//         {clearanceOptions[1]}
-//       </MDTypography>
-//     ),
-//     status: (
-//       <>
-//         <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-//           בהדפסה
-//         </MDTypography>
-//         <Progress color="info" value={60} />
-//       </>
-//     ),
-//     additionalInfo: (
-//       <MDTypography component="a" href="#" color="text">
-//         <Icon>info</Icon>
-//       </MDTypography>
-//     ),
-//   },
-//   {
-//     project: projectOptions[4],
-//     clearance: (
-//       <MDTypography component="a" href="#" variant="button" color="text" fontWeight="medium">
-//         {clearanceOptions[0]}
-//       </MDTypography>
-//     ),
-//     status: (
-//       <>
-//         <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-//           בהדפסה
-//         </MDTypography>
-//         <Progress color="info" value={60} />
-//       </>
-//     ),
-//     additionalInfo: (
-//       <MDTypography component="a" href="#" color="text">
-//         <Icon>info</Icon>
-//       </MDTypography>
-//     ),
-//   },
-//   {
-//     project: projectOptions[5],
-//     clearance: (
-//       <MDTypography component="a" href="#" variant="button" color="text" fontWeight="medium">
-//         {clearanceOptions[2]}
-//       </MDTypography>
-//     ),
-//     status: (
-//       <>
-//         <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-//           בהדפסה
-//         </MDTypography>
-//         <Progress color="info" value={60} />
-//       </>
-//     ),
-//     additionalInfo: (
-//       <MDTypography component="a" href="#" color="text">
-//         <Icon>info</Icon>
-//       </MDTypography>
-//     ),
-//   },
-// ],
