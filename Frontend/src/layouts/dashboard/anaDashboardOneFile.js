@@ -5,6 +5,7 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-unused-vars */
 /* eslint-disable import/no-unresolved */
+/* eslint-disable-next-line no-restricted-globals */
 /**
 =========================================================
 * Material Dashboard 2 React - v2.1.0
@@ -230,6 +231,7 @@ function Dashboard() {
         const resultCount = {};
         const monthCount = [];
         const monthNameC = [];
+        const times = [];
         // let reszeroTfive = 0;
         // let resfiveTfifteen = 0;
         // let resfifteenTthirty = 0;
@@ -259,13 +261,23 @@ function Dashboard() {
 
             return true;
           }
+          if (
+            element.__EMPTY_8 !== null ||
+            element.__EMPTY_7 !== null ||
+            element.__EMPTY_8 !== undefined ||
+            element.__EMPTY_7 !== undefined
+          ) {
+            times.push(calDate(element.__EMPTY_8) / 1000 - calDate(element.__EMPTY_7) / 1000);
+          } else {
+            times.push(0);
+          }
 
           return false;
         });
         // response.data.excelData.forEach((element) => {
 
         // });
-
+        console.log(times);
         console.log(monthCount);
         console.log(monthNameC);
         // console.log(Object.values(monthCount));
