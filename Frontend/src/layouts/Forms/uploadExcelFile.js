@@ -90,6 +90,7 @@ import * as XLSX from "xlsx";
 
 // user and auth import
 import { signin, authenticate, isAuthenticated } from "auth/index";
+import excelHeaderFileCheckList from "constValue/excelHeaderFileCheckList";
 import excelANAExample from "../../assets/images/excelANAExample.png";
 // import { merge2Fiels } from "merageJasonExcelFiels";
 const { user } = isAuthenticated();
@@ -342,7 +343,38 @@ export default function HozlaPrintRequestForm() {
     });
 
     promise.then((d) => {
-      if (d[0]["היסטוריית אירועים"]) {
+      // if (d[0]["היסטוריית אירועים"]) {
+      console.log("excelHeaderFileCheckList");
+      console.log(excelHeaderFileCheckList);
+      if (
+        d[1].__EMPTY !== undefined &&
+        d[1].__EMPTY === excelHeaderFileCheckList.__EMPTY &&
+        d[1].__EMPTY_1 !== undefined &&
+        d[1].__EMPTY_1 === excelHeaderFileCheckList.__EMPTY_1 &&
+        d[1].__EMPTY_2 !== undefined &&
+        d[1].__EMPTY_2 === excelHeaderFileCheckList.__EMPTY_2 &&
+        d[1].__EMPTY_3 !== undefined &&
+        d[1].__EMPTY_3 === excelHeaderFileCheckList.__EMPTY_3 &&
+        d[1].__EMPTY_4 !== undefined &&
+        d[1].__EMPTY_4 === excelHeaderFileCheckList.__EMPTY_4 &&
+        d[1].__EMPTY_5 !== undefined &&
+        d[1].__EMPTY_5 === excelHeaderFileCheckList.__EMPTY_5 &&
+        d[1].__EMPTY_6 !== undefined &&
+        d[1].__EMPTY_6 === excelHeaderFileCheckList.__EMPTY_6 &&
+        d[1].__EMPTY_7 !== undefined &&
+        d[1].__EMPTY_7 === excelHeaderFileCheckList.__EMPTY_7 &&
+        d[1].__EMPTY_8 !== undefined &&
+        d[1].__EMPTY_8 === excelHeaderFileCheckList.__EMPTY_8 &&
+        d[1].__EMPTY_9 !== undefined &&
+        d[1].__EMPTY_9 === excelHeaderFileCheckList.__EMPTY_9 &&
+        d[1].__EMPTY_10 !== undefined &&
+        d[1].__EMPTY_10 === excelHeaderFileCheckList.__EMPTY_10 &&
+        d[1].__EMPTY_11 !== undefined &&
+        d[1].__EMPTY_11 === excelHeaderFileCheckList.__EMPTY_11 &&
+        d[1].__EMPTY_12 !== undefined &&
+        d[1].__EMPTY_12 === excelHeaderFileCheckList.__EMPTY_12
+      ) {
+        console.log("success");
         console.log(d[0]["היסטוריית אירועים"]);
         setData({ ...data, rangeOfDates: d[0]["היסטוריית אירועים"], dataFile: d.slice(2) });
       } else {
@@ -597,7 +629,9 @@ export default function HozlaPrintRequestForm() {
             const excelDataMerage = {
               // numPages: 1,
               personalnumber: data.personalnumber,
-              excelDataMerage: uniqueData,
+              // merge
+              // excelDataMerage: uniqueData,
+              excelDataMerage: dbDataFile,
             };
             axios
               .post(`http://localhost:5000/NgCar/MerageAnaExcelData/updateMerage`, excelDataMerage)
