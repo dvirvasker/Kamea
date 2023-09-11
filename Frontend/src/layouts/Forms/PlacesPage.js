@@ -211,45 +211,45 @@ export default function Places() {
     "שם אוסף העבודה",
     "עבור",
   ];
-  useEffect(() => {
-    axios
-      .get(`http://localhost:5000/NgCar/places/`)
-      .then((response) => {
-        // console.log(`the object data`);
-        console.log(`tora ${response}`);
-        if (response.data === null) {
-          // const toraHeilitsData = new FormData();
-          // Object.keys(toraHeilitVolumes).forEach((key) => {
-          //   toraHeilitsData.append("toraHeilitVolumes", toraHeilitVolumes[key]);
-          // });
-          // axios.post(`http://localhost:5000/toraHeilit/add`, toraHeilitVolumes).then((res) => {
-          //   // toast.success(`הטופס נשלח בהצלחה`);
-          //   // history.push(`/signin`);
-          //   console.log(res.data);
-          //   setToraHeilitVolume(response.data.toraHeilitVolumes);
-          // });
-          // setAreaPage([["ז''י"], ["צפון"], ["מרכז"], ["דרום"]]);
-          // window.location.reload();
-          // console.log(twoSides);
-        } else {
-          setAreaPage(response.data.placesVolumes);
-          // setAreaPage({
-          //   ...AreaPage,
-          //   // AreaPage[0].places: response.data.ZroaYebasha,
-          //   //   [AreaPage[1].places]: response.data.North,
-          //   //   [AreaPage[2].places]: response.data.Center,
-          //   //   [AreaPage[3].places]: response.data.South,
-          // });
-          // // setToraHeilitVolume(response.data.toraHeilitVolumes);
-          console.log(`data`);
-          console.log(response.data);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        console.log(error.code);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get(`http://localhost:5000/NgCar/places/`)
+  //     .then((response) => {
+  //       // console.log(`the object data`);
+  //       console.log(`tora ${response}`);
+  //       if (response.data === null) {
+  //         // const toraHeilitsData = new FormData();
+  //         // Object.keys(toraHeilitVolumes).forEach((key) => {
+  //         //   toraHeilitsData.append("toraHeilitVolumes", toraHeilitVolumes[key]);
+  //         // });
+  //         // axios.post(`http://localhost:5000/toraHeilit/add`, toraHeilitVolumes).then((res) => {
+  //         //   // toast.success(`הטופס נשלח בהצלחה`);
+  //         //   // history.push(`/signin`);
+  //         //   console.log(res.data);
+  //         //   setToraHeilitVolume(response.data.toraHeilitVolumes);
+  //         // });
+  //         // setAreaPage([["ז''י"], ["צפון"], ["מרכז"], ["דרום"]]);
+  //         // window.location.reload();
+  //         // console.log(twoSides);
+  //       } else {
+  //         setAreaPage(response.data.placesVolumes);
+  //         // setAreaPage({
+  //         //   ...AreaPage,
+  //         //   // AreaPage[0].places: response.data.ZroaYebasha,
+  //         //   //   [AreaPage[1].places]: response.data.North,
+  //         //   //   [AreaPage[2].places]: response.data.Center,
+  //         //   //   [AreaPage[3].places]: response.data.South,
+  //         // });
+  //         // // setToraHeilitVolume(response.data.toraHeilitVolumes);
+  //         console.log(`data`);
+  //         console.log(response.data);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       console.log(error.code);
+  //     });
+  // }, []);
 
   const handleUploadFiles = (uploadFiles) => {
     const uploaded = [...files];
@@ -683,73 +683,73 @@ export default function Places() {
       south: AreaPage[3],
     };
     // console.log(allArea);
-    axios
-      .get("http://localhost:5000/NgCar/places/")
-      .then((res) => {
-        if (res.data === null) {
-          axios
-            .post(`http://localhost:5000/NgCar/places/add`, allArea)
-            .then((resAdd) => {
-              setData({
-                ...data,
-                work_id: resAdd.data,
-                loading: false,
-                error: false,
-                successmsg: true,
-                NavigateToReferrer: false,
-              });
-              // toast.success(`הטופס נשלח בהצלחה`);
-              // history.push(`/signin`);
-              console.log(resAdd.data);
-            })
-            .catch((errAdd) => {
-              // console.log(error);
-              setData({
-                ...data,
-                errortype: errAdd.response,
-                loading: false,
-                error: true,
-                NavigateToReferrer: false,
-              });
-            });
-        } else {
-          axios
-            .post(`http://localhost:5000/NgCar/places/update`, allArea)
-            .then((resAdd) => {
-              setData({
-                ...data,
-                work_id: resAdd.data,
-                loading: false,
-                error: false,
-                successmsg: true,
-                NavigateToReferrer: false,
-              });
-              // toast.success(`הטופס נשלח בהצלחה`);
-              // history.push(`/signin`);
-              console.log(resAdd.data);
-            })
-            .catch((errAdd) => {
-              // console.log(error);
-              setData({
-                ...data,
-                errortype: errAdd.response,
-                loading: false,
-                error: true,
-                NavigateToReferrer: false,
-              });
-            });
-        }
-      })
-      .catch((err) => {
-        // console.log(error);
-        setData({
-          ...data,
-          errortype: err.response,
-          loading: false,
-          error: true,
-          NavigateToReferrer: false,
-        });
-      });
+    // axios
+    //   .get("http://localhost:5000/NgCar/places/")
+    //   .then((res) => {
+    //     if (res.data === null) {
+    //       axios
+    //         .post(`http://localhost:5000/NgCar/places/add`, allArea)
+    //         .then((resAdd) => {
+    //           setData({
+    //             ...data,
+    //             work_id: resAdd.data,
+    //             loading: false,
+    //             error: false,
+    //             successmsg: true,
+    //             NavigateToReferrer: false,
+    //           });
+    //           // toast.success(`הטופס נשלח בהצלחה`);
+    //           // history.push(`/signin`);
+    //           console.log(resAdd.data);
+    //         })
+    //         .catch((errAdd) => {
+    //           // console.log(error);
+    //           setData({
+    //             ...data,
+    //             errortype: errAdd.response,
+    //             loading: false,
+    //             error: true,
+    //             NavigateToReferrer: false,
+    //           });
+    //         });
+    //     } else {
+    //       axios
+    //         .post(`http://localhost:5000/NgCar/places/update`, allArea)
+    //         .then((resAdd) => {
+    //           setData({
+    //             ...data,
+    //             work_id: resAdd.data,
+    //             loading: false,
+    //             error: false,
+    //             successmsg: true,
+    //             NavigateToReferrer: false,
+    //           });
+    //           // toast.success(`הטופס נשלח בהצלחה`);
+    //           // history.push(`/signin`);
+    //           console.log(resAdd.data);
+    //         })
+    //         .catch((errAdd) => {
+    //           // console.log(error);
+    //           setData({
+    //             ...data,
+    //             errortype: errAdd.response,
+    //             loading: false,
+    //             error: true,
+    //             NavigateToReferrer: false,
+    //           });
+    //         });
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     // console.log(error);
+    //     setData({
+    //       ...data,
+    //       errortype: err.response,
+    //       loading: false,
+    //       error: true,
+    //       NavigateToReferrer: false,
+    //     });
+    //   });
   };
 
   const placesPage = () => (

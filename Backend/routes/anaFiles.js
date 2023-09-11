@@ -30,69 +30,15 @@ router.route("/archivedRequests").get((req, res) => {
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
-router.route("/getCountStatus").get((req, res) => {
-  let received = 0;
-  let inWorking = 0;
-  let inprint = 0;
-  let readyForTakeIn = 0;
-  // let archive = 0;
-  AnaFiles.find()
-    .then((request) =>
-      //  res.json(request)
-      {
-        request.map((hozla) => {
-          if (hozla.status === 25) {
-            received += 1;
-          } else if (hozla.status === 50) {
-            inWorking += 1;
-          } else if (hozla.status === 75) {
-            inprint += 1;
-          } else if (hozla.status === 100) {
-            readyForTakeIn += 1;
-          }
-          // else if (hozla.status === 125) {
-          //   archive += 1;
-          // }
-        });
-        // console.log(`received: ${received}`);
-        // console.log(`inprint: ${inprint}`);
-        // console.log(`ended: ${ended}`);
-        // console.log(`readyForTakeIn: ${readyForTakeIn}`);
-        // console.log(`archive: ${archive}`);
-      }
-    )
-    .then(() => res.json({ received, inWorking, inprint, readyForTakeIn }))
-    .catch((err) => res.status(400).json("Error: " + err));
-});
-
 router.route("/add").post((req, res) => {
   const typeRequest = req.body.typeRequest;
   const user_card_number = req.body.user_card_number;
-  const forTypePrint = req.body.forTypePrint;
-  const unit = req.body.unit;
-  const anaf = req.body.anaf;
-  const mador = req.body.mador;
-  const phoneNumber = req.body.phoneNumber;
-  const workName = req.body.workName;
-  const workClearance = req.body.workClearance;
-  const bindingType = req.body.bindingType;
-  const bindingTypeOther = req.body.bindingTypeOther;
-  const copyType = req.body.copyType;
-  const pageType = req.body.pageType;
   const numOfCopyies = Number(req.body.numOfCopyies);
-  const fullNameAsker = req.body.fullNameAsker;
-  const workGivenDate = Date.parse(req.body.workGivenDate);
-  const fullNameReciver = req.body.fullNameReciver;
-  const fullNameTakein = req.body.fullNameTakein;
-  const workRecivedDate = Date.parse(req.body.workRecivedDate);
   const files_id = req.body.files_id;
   const status = req.body.status;
   const personalnumber = req.body.personalnumber;
   const clientNote = String(req.body.clientNote);
-  const toraHeilitVolumes = req.body.toraHeilitVolumes;
   const rangeOfDates = req.body.rangeOfDates;
-
-  const propPrints = req.body.propPrints;
   const fileName = req.body.fileName;
 
   // const dataFile = req.body.dataFile;
@@ -122,33 +68,14 @@ router.route("/add").post((req, res) => {
   const dataFile = excelDataArray;
 
   const newAnaFiles = new AnaFiles({
-    typeRequest,
     rangeOfDates,
     dataFile,
     user_card_number,
-    forTypePrint,
-    unit,
-    anaf,
-    mador,
-    phoneNumber,
-    workName,
-    workClearance,
-    bindingType,
-    bindingTypeOther,
-    copyType,
-    pageType,
     numOfCopyies,
-    fullNameAsker,
-    workGivenDate,
-    fullNameReciver,
-    fullNameTakein,
-    workRecivedDate,
     files_id,
     status,
     personalnumber,
     clientNote,
-    toraHeilitVolumes,
-    propPrints,
     fileName,
   });
 
@@ -209,31 +136,12 @@ router.route("/deleteUploadFile/:id").delete((req, res) => {
 router.route("/update/:id").post((req, res) => {
   AnaFiles.findById(req.params.id)
     .then((request) => {
-      request.typeRequest = req.body.typeRequest;
       request.user_card_number = req.body.user_card_number;
-      request.forTypePrint = req.body.forTypePrint;
-      request.unit = req.body.unit;
-      request.anaf = req.body.anaf;
-      request.mador = req.body.mador;
-      request.phoneNumber = req.body.phoneNumber;
-      request.workName = req.body.workName;
-      request.workClearance = req.body.workClearance;
-      request.bindingType = req.body.bindingType;
-      request.bindingTypeOther = req.body.bindingTypeOther;
-      request.copyType = req.body.copyType;
-      request.pageType = req.body.pageType;
       request.numOfCopyies = Number(req.body.numOfCopyies);
-      request.fullNameAsker = req.body.fullNameAsker;
-      request.workGivenDate = Date.parse(req.body.workGivenDate);
-      request.fullNameReciver = req.body.fullNameReciver;
-      request.fullNameTakein = req.body.fullNameTakein;
-      request.workRecivedDate = Date.parse(req.body.workRecivedDate);
       request.files_id = req.body.files_id;
       request.clientNote = String(req.body.clientNote);
       request.status = req.body.status;
-      request.toraHeilitVolumes = req.body.toraHeilitVolumes;
       request.personalnumber = req.body.personalnumber;
-      request.propPrints = req.body.propPrints;
       request.rangeOfDates = req.body.rangeOfDates;
       // request.dataFile = req.body.dataFile;
       request.fileName = req.body.fileName;

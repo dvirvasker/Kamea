@@ -4,35 +4,14 @@ const mongoose = require("mongoose");
 //user_cars is the cadr id that was used to conect to the computer when the order was made
 const AnaFilesSchema = new mongoose.Schema(
   {
-    typeRequest: String,
-    // user_card_number: String,
-    forTypePrint: String,
-    unit: String,
-    anaf: String,
-    mador: String,
-
-    phoneNumber: String,
-    workName: String,
-    workClearance: String,
-    bindingType: String,
-    bindingTypeOther: { type: String, default: "" },
-    copyType: String,
-    pageType: String,
     numOfCopyies: Number,
 
-    fullNameAsker: String,
-    workGivenDate: { type: Date, default: () => Date.now() },
-
-    fullNameReciver: String,
-    fullNameTakein: String,
-    workRecivedDate: Date,
     rangeOfDates: String,
     dataFile: [Object],
     fileName: { type: String, default: "" },
 
     files_id: { type: String, default: "" },
-    propPrints: { type: Object },
-    toraHeilitVolumes: { type: Object },
+
     status: { type: Number, default: 25 },
 
     clientNote: { type: String, default: "" },

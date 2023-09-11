@@ -56,9 +56,6 @@ app.use("/NgCar/requsest", AnaFiles);
 const MerageAnaExcelData = require("./routes/merageAnaExcelData");
 app.use("/NgCar/MerageAnaExcelData", MerageAnaExcelData);
 
-const places = require("./routes/places");
-app.use("/NgCar/places", places);
-
 // Hozla Requests routes for admin
 // const hozlaAdminRequestsRouter = require("./routes/hozlaAdminRequests");
 // app.use("/hozlaAdminRequests", hozlaAdminRequestsRouter);
