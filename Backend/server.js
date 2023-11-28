@@ -42,12 +42,12 @@ mongoose
 //user routes
 const authRoutes = require("./routes/authentication/auth");
 const userRoutes = require("./routes/authentication/users");
-app.use("/api", authRoutes);
-app.use("/api", userRoutes);
+app.use("/NgCar", authRoutes);
+app.use("/NgCar", userRoutes);
 
 //* file uploader Routes
 // const fileuploaderRoutes = require("./routes/fileuploader100/fileuploader");
-// app.use('/api',fileuploaderRoutes)
+// app.use('/NgCar',fileuploaderRoutes)
 
 //Hozla Requests routes for Client
 const AnaFiles = require("./routes/anaFiles");
@@ -63,12 +63,12 @@ app.use("/NgCar/MerageAnaExcelData", MerageAnaExcelData);
 // //user routes
 // const authRoutes = require("./routes/authentication/auth");
 // const userRoutes = require("./routes/authentication/users");
-// app.use("/api", authRoutes);
-// app.use("/api", userRoutes);
+// app.use("/NgCar", authRoutes);
+// app.use("/NgCar", userRoutes);
 
 // upload files
 const fileuploaderRoutes = require("./routes/fileuploader/fileuploader");
-app.use("/api", fileuploaderRoutes);
+app.use("/NgCar", fileuploaderRoutes);
 
 // Annual Info Admin
 // const AnnualInfoAdmin = require("./routes/AnnualInfoAdmin");

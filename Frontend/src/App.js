@@ -72,7 +72,6 @@ import WebsiteLoader from "components/WebsiteLoader/WebsiteLoader";
 import Error404 from "views/Error404";
 import FieldReuestFormDB from "layouts/Forms/FieldReuestFormDB";
 import SignIn from "layouts/authentication/sign-in";
-import SignInURL from "layouts/authentication/sign-in/sign-in-URLs/urlLayout";
 
 import ExcelTable from "layouts/tables/excelTable";
 import ResearchPage from "layouts/Forms/ResearchPage";
@@ -90,6 +89,8 @@ import { signin, authenticate, isAuthenticated, updateRefreshCount } from "auth/
 
 import sidenav from "assets/theme/components/sidenav";
 import AboutPage from "views/aboutpage/AboutPage";
+import SignUpUser from "layouts/authentication/sign-up/signUpUser";
+import SignInForm from "layouts/authentication/sign-in/index";
 
 export default function App() {
   const params = useParams();
@@ -266,14 +267,6 @@ export default function App() {
               user.user.admin === "1" || user.user.admin === "2" ? (
                 <Routes>
                   {getRoutes(AdminRoutes)}
-
-                  <Route path="/authentication/sign-in">
-                    <Route
-                      path=":idUR"
-                      render={() => getRoutes(AdminRoutes)}
-                      element={<SignInURL />}
-                    />
-                  </Route>
                   <Route path="/" element={<Navigate to="/Dashboard" />} />
                   <Route path="/about-us" element={<AboutPage />} />
                   {/* <Route path="/" element={<Navigate to="/authentication/sign-in" />} /> */}
@@ -314,9 +307,6 @@ export default function App() {
               user.user.admin !== "0" ? (
                 <Routes>
                   {getRoutes(routes)}
-                  <Route path="/authentication/sign-in">
-                    <Route path=":idUR" render={() => getRoutes(routes)} element={<SignInURL />} />
-                  </Route>
                   <Route path="/" element={<Navigate to="/userRequestsTable" />} />
                   {/* <Route path="/" element={<Navigate to="/authentication/sign-in" />} /> */}
                   <Route path="/Error404" element={<Error404 />} />
@@ -334,13 +324,6 @@ export default function App() {
               ) : (
                 <Routes>
                   {getRoutes(userToraHeilit)}
-                  <Route path="/authentication/sign-in">
-                    <Route
-                      path=":idUR"
-                      render={() => getRoutes(userToraHeilit)}
-                      element={<SignInURL />}
-                    />
-                  </Route>
                   <Route path="/" element={<Navigate to="/userRequestsTable" />} />
                   {/* <Route path="/" element={<Navigate to="/authentication/sign-in" />} /> */}
                   <Route path="/Error404" element={<Error404 />} />
@@ -357,60 +340,15 @@ export default function App() {
                 </Routes>
               )
             ) : (
-              // : (
-              //   <Routes>
-              //     {getRoutes(userToraHeilit)}
-              //     <Route path="/authentication/sign-in">
-              //       <Route
-              //         path=":idUR"
-              //         render={() => getRoutes(userToraHeilit)}
-              //         element={<SignInURL />}
-              //       />
-              //     </Route>
-              //     <Route path="/" element={<Navigate to="/userRequestsTable" />} />
-              //     {/* <Route path="/" element={<Navigate to="/authentication/sign-in" />} /> */}
-              //     <Route path="/Error404" element={<Error404 />} />
-              //     {/* <Route path="/RequestForm">
-              //       <Route path=":formID" element={<FieldReuestFormDB />} />
-              //     </Route> */}
-              //     <Route path="/toraHeilitrequestForm">
-              //       <Route path=":formID" element={<ToraHeilitFieldReuestFormDB />} />
-              //     </Route>
-              //     {/* <Route path="/adminFeild">
-              //       <Route path=":formID" element={<AdminFeildPrintInfoFormDB />} />
-              //     </Route> */}
-              //     <Route path="*" element={<Error404 />} />
-              //   </Routes>
-              // )
-              // <Routes>
-              //   {getRoutes(routes)}
-              //   <Route path="/authentication/sign-in">
-              //     <Route path=":idUR" render={() => getRoutes(routes)} element={<SignInURL />} />
-              //   </Route>
-              //   <Route path="/" element={<Navigate to="/userRequestsTable" />} />
-              //   {/* <Route path="/" element={<Navigate to="/authentication/sign-in" />} /> */}
-              //   <Route path="/Error404" element={<Error404 />} />
-              //   <Route path="/RequestForm">
-              //     <Route path=":formID" element={<FieldReuestFormDB />} />
-              //   </Route>
-              //   <Route path="/toraHeilitrequestForm">
-              //     <Route path=":formID" element={<ToraHeilitFieldReuestFormDB />} />
-              //   </Route>
-              //   {/* <Route path="/adminFeild">
-              //     <Route path=":formID" element={<AdminFeildPrintInfoFormDB />} />
-              //   </Route> */}
-              //   <Route path="*" element={<Error404 />} />
-              // </Routes>
               <Routes>
-                <Route path="/authentication/sign-in">
-                  <Route path=":idUR" element={<SignInURL />} />
-                </Route>
-                {/* <Route path="/Error404" element={<Error404 />} /> */}
+                <Route path="/authentication/sign-up" element={<SignUpUser />} />
+                <Route path="/authentication/sign-in" element={<SignInForm />} />
+                <Route path="/Error404" element={<Error404 />} />
                 <Route path="/about-us" element={<AboutPage />} />
                 {/* <Route path="/" element={<Navigate to="/authentication/sign-in" />} />
                 <Route path="*" element={<Navigate to="/authentication/sign-in" />} /> */}
-                <Route path="/" element={<Navigate to="/about-us" />} />
-                {/* <Route path="*" element={<Navigate to="/Error404" />} /> */}
+                <Route path="/" element={<Navigate to="/authentication/sign-in" />} />
+                <Route path="*" element={<Navigate to="/Error404" />} />
               </Routes>
             )}
           </ThemeProvider>
@@ -418,130 +356,6 @@ export default function App() {
       )}
     </>
   );
-
-  //! this is the rutes where the sign-in is without URL's
-  //! Begin:
-  // {layout === "dashboard" && user.user !== undefined ? (
-  //   <>
-  //     {/* {console.groupCollapsed("Before the sidenav routing init - function")} */}
-  //     {/* {console.log(user.user)} */}
-  //     {/* {console.log(user.user.admin)} */}
-  //     {/* {console.log(user.user.admin !== "0")} */}
-  //     {/* {console.log(user.user.admin !== "0" ? AdminRoutes : routes)} */}
-  //     {/* {console.groupEnd()} */}
-  //     {/* {console.log("inside the sidenav")} */}
-  //     <Sidenav
-  //       color={sidenavColor}
-  //       brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-  //       brandName='הוצל"א'
-  //       routes={user.user.admin !== "0" ? AdminRoutes : routes}
-  //       onMouseEnter={handleOnMouseEnter}
-  //       onMouseLeave={handleOnMouseLeave}
-  //     />
-  //     <Configurator />
-  //     {configsButton}
-  //   </>
-  // ) : null}
-  // {/* {layout === "vr" && <Configurator />} */}
-  // {user.user !== undefined ? (
-  //   user.user.admin === "1" || user.user.admin === "2" ? (
-  //     <Routes>
-  //       {getRoutes(AdminRoutes)}
-  //       <Route
-  //         path="/authentication/sign-in"
-  //         render={() => getRoutes(AdminRoutes)}
-  //         element={<SignIn />}
-  //       />
-  //       <Route path="/" element={<Navigate to="/AdminHome" />} />
-  //       {/* <Route path="/" element={<Navigate to="/authentication/sign-in" />} /> */}
-  //       <Route path="/Error404" element={<Error404 />} />
-  //       {/* <Route path="/adminForm" element={<HozlaAdminPrintInfoForm />} /> */}
-  //       {/* <Route path="/adminFieldReuestFormDB" element={<AdminFieldReuestFormDB />} /> */}
-  //       <Route path="/RequestForm">
-  //         <Route path=":formID" element={<FieldReuestFormDB />} />
-  //       </Route>
-  //       <Route path="/adminForm">
-  //         <Route path=":formID" element={<HozlaAdminPrintInfoForm />} />
-  //       </Route>
-  //       <Route path="*" element={<Error404 />} />
-  //     </Routes>
-  //   ) : (
-  //     <Routes>
-  //       {getRoutes(routes)}
-  //       <Route
-  //         path="/authentication/sign-in"
-  //         render={() => getRoutes(AdminRoutes)}
-  //         element={<SignIn />}
-  //       />
-  //       <Route path="/" element={<Navigate to="/userRequestsTable" />} />
-  //       {/* <Route path="/" element={<Navigate to="/authentication/sign-in" />} /> */}
-  //       <Route path="/Error404" element={<Error404 />} />
-  //       <Route path="/RequestForm">
-  //         <Route path=":formID" element={<FieldReuestFormDB />} />
-  //       </Route>
-  //       <Route path="*" element={<Error404 />} />
-  //     </Routes>
-  //   )
-  // ) : (
-  //   <Routes>
-  //     <Route path="/authentication/sign-in" element={<SignIn />} />
-  //     {/* <Route path="/Error404" element={<Error404 />} /> */}
-  //     <Route path="/" element={<Navigate to="/authentication/sign-in" />} />
-  //     <Route path="*" element={<Navigate to="/authentication/sign-in" />} />
-  //     {/* <Route path="*" element={<Navigate to="/Error404" />} /> */}
-  //   </Routes>
-  // )}
-  //! End.
-
-  // return direction === "rtl" ? (
-  //   <CacheProvider value={rtlCache}>
-  //     <ThemeProvider theme={darkMode ? themeDarkRTL : themeRTL}>
-  //       <CssBaseline />
-  //       {layout === "dashboard" && (
-  //         <>
-  //           <Sidenav
-  //             color={sidenavColor}
-  //             brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-  //             brandName="Material Dashboard 2"
-  //             routes={routes}
-  //             onMouseEnter={handleOnMouseEnter}
-  //             onMouseLeave={handleOnMouseLeave}
-  //           />
-  //           <Configurator />
-  //           {configsButton}
-  //         </>
-  //       )}
-  //       {layout === "vr" && <Configurator />}
-  //       <Routes>
-  //         {getRoutes(routes)}
-  //         <Route path="*" element={<Navigate to="/dashboard" />} />
-  //       </Routes>
-  //     </ThemeProvider>
-  //   </CacheProvider>
-  // ) : (
-  //   <ThemeProvider theme={darkMode ? themeDark : theme}>
-  //     <CssBaseline />
-  //     {layout === "dashboard" && (
-  //       <>
-  //         <Sidenav
-  //           color={sidenavColor}
-  //           brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-  //           brandName="Material Dashboard 2"
-  //           routes={routes}
-  //           onMouseEnter={handleOnMouseEnter}
-  //           onMouseLeave={handleOnMouseLeave}
-  //         />
-  //         <Configurator />
-  //         {configsButton}
-  //       </>
-  //     )}
-  //     {layout === "vr" && <Configurator />}
-  //     <Routes>
-  //       {getRoutes(routes)}
-  //       <Route path="*" element={<Navigate to="/dashboard" />} />
-  //     </Routes>
-  //   </ThemeProvider>
-  // );
 }
 
 /*

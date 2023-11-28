@@ -54,7 +54,7 @@ const adminManagementTable = () => {
   // eslint-disable-next-line consistent-return
   useEffect(() => {
     if (!isAuthenticated()) {
-      return <Navigate to="/AdminHome" />;
+      return <Navigate to="/Dashboard" />;
     }
   }, []);
 

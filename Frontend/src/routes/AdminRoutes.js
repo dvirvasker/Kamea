@@ -49,7 +49,7 @@ import RTL from "layouts/rtl";
 import Notifications from "layouts/notifications";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
-import SignUp from "layouts/authentication/sign-up";
+import SignUp from "layouts/authentication/sign-up/signUpUser";
 import ManagementHoztla from "layouts/tables/adminManagementTable";
 import AdminArchiveTable from "layouts/tables/adminArchiveTable";
 import ResearchPage from "layouts/Forms/ResearchPage";

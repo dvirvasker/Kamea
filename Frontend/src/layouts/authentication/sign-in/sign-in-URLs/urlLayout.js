@@ -51,7 +51,7 @@ import Footer from "examples/Footer";
 import BasicLayout from "layouts/authentication/components/BasicLayout";
 
 // Images
-import bgImage from "assets/images/book-bg-image.jpg";
+import bgImage from "assets/images/jeepArmy.jpg";
 
 import { signin, signout, authenticate, isAuthenticated, updateRefreshCount } from "auth/index";
 import { CompressOutlined } from "@mui/icons-material";
@@ -216,7 +216,7 @@ function signInURL(props) {
   const signInAxios = async (personalnumber) => {
     let r_massage = "_";
     await axios
-      .post(`http://localhost:5000/api/signin`, { personalnumber })
+      .post(`http://localhost:5000/HozlaApi/signin`, { personalnumber })
       .then((res) => {
         // console.log(res.data.user);
         if (res.data.user === "DoNotExist" || res.data.user === undefined) {
@@ -251,7 +251,7 @@ function signInURL(props) {
       holzlaRequest: signUpData.holzlaRequest,
     };
     await axios
-      .post(`http://localhost:5000/api/signup`, newUser)
+      .post(`http://localhost:5000/NgCar/signup`, newUser)
       .then(
         (res) =>
           // console.log(`gotten new user from sign up`);
@@ -279,8 +279,8 @@ function signInURL(props) {
     const signInAxiosResult = await signInAxios(personalnumber_demo);
     console.log(signInAxiosResult);
     if (signInAxiosResult === "DoNotExist") {
-      if (params.idUR === "63d6b732c8301e46dd9a807d") {
-        // http://localhost:3000/authentication/sign-in/63d6b732c8301e46dd9a807d
+      if (params.idUR === "63a46456f543db2b20b65150") {
+        // http://localhost:3000/authentication/sign-in/63a46456f543db2b20b65150
         //? for the admin 2 - admin of admins
         admin_value = "2";
         personalnumber_demo = "1234567";
@@ -303,8 +303,8 @@ function signInURL(props) {
         personalnumber_demo = "1234567";
         setSignUpData({
           ...signUpData,
-          firstName: "קורן",
-          lastLame: "בר יוסף",
+          firstName: "אנטוני",
+          lastLame: "פרסון",
           personalnumber: personalnumber_demo,
           admin: admin_value,
           unit: "מקטנאר",
@@ -313,15 +313,15 @@ function signInURL(props) {
           phoneNumber: "123456789",
           email: "sS@gmail.com",
         });
-      } else if (params.idUR === "63d6b78c90445cc589be375a") {
+      } else if (params.idUR === "63a4661a4654d9024fd1304c") {
         //? for the admin 0 - regular user
-        // http://localhost:3000/authentication/sign-in/63d6b78c90445cc589be375a
+        // http://localhost:3000/authentication/sign-in/63a4661a4654d9024fd1304c
         admin_value = "0";
         personalnumber_demo = "7654321";
         setSignUpData({
           ...signUpData,
-          firstName: "קורן",
-          lastLame: "בר יוסף",
+          firstName: "אנטוני",
+          lastLame: "פרסון",
           personalnumber: personalnumber_demo,
           admin: admin_value,
           unit: "מקטנאר",
@@ -331,6 +331,23 @@ function signInURL(props) {
           email: "sS@gmail.com",
         });
       }
+    } else if (params.idUR === "63b2f6db4fb6f63360b6b601") {
+      //? for the admin 0 - regular user
+      // http://localhost:3000/authentication/sign-in/63b2f6db4fb6f63360b6b601
+      admin_value = "3";
+      personalnumber_demo = "7654321";
+      setSignUpData({
+        ...signUpData,
+        firstName: "קורן",
+        lastLame: "בר יוסף",
+        personalnumber: personalnumber_demo,
+        admin: admin_value,
+        unit: "מקטנאר",
+        anaf: "תון",
+        mador: "NG",
+        phoneNumber: "0123456789",
+        email: "kK@gmail.com",
+      });
     } else if (signInAxiosResult === "sucsses") {
       // console.log("==========RefreshCount is 0===============");
       // console.log(localStorage.getItem("RefreshCount"));
@@ -356,7 +373,7 @@ function signInURL(props) {
     // }
 
     // axios
-    //   .get(`http://localhost:5000/auth/passportauth`)
+    //   .get(`http://localhost:5000/HozlaApi/HozlaApi/HozlaApi/HozlaApi/HozlaApi/auth/passportauth`)
     //   .then((response) => {
     //     console.log(response.data);
     //     console.log(params.idUR);
@@ -392,8 +409,7 @@ function signInURL(props) {
   };
   useEffect(() => {
     // setDemo(true);
-
-    passport();
+    // passport();
     // console.log(params.idUR);
   }, []);
 

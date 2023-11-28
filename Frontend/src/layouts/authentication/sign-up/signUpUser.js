@@ -1,8 +1,10 @@
 /* eslint-disable no-else-return */
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-no-bind */
 /* eslint-disable import/no-unresolved */
 /* eslint-disable import/no-duplicates */
 /* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-curly-brace-presence */
 /**
 =========================================================
@@ -52,19 +54,20 @@ import { authenticate, isAuthenticated, signin, signout, updateRefreshCount } fr
 import bgImage from "assets/images/jeepArmy.jpg";
 import axios from "axios";
 import { Form } from "reactstrap";
-import BasicLayout from "../components/BasicLayout";
 
 // import bgImage from "assets/images/max-burger-DMRQmC8gRBs-unsplash.jpg";
 
-function signIn(props) {
-  // const { title, urlType } = props;
-  const title = "NgCar";
-  // const [rememberMe, setRememberMe] = useState(false);
-  // const handleSetRememberMe = () => setRememberMe(!rememberMe);
-  // const { user } = isAuthenticated();
-
-  const [signInData, setSignInData] = useState({
+// ? Hozla user ==> 0
+// ? ToraHailit user ==> 3
+function SignUpUser() {
+  // const { userType, title, urlType } = props;
+  const userType = "2";
+  const title = "מערכת NgCar";
+  const [signUpData, setSignUpData] = useState({
+    firstName: "",
+    lastName: "",
     personalnumber: "",
+    userType: "",
 
     errortype: "",
     error: false,
@@ -75,14 +78,14 @@ function signIn(props) {
 
   function handleChange(evt) {
     const { value } = evt.target;
-    setSignInData({ ...signInData, [evt.target.name]: value });
+    setSignUpData({ ...signUpData, [evt.target.name]: value });
   }
 
   //* ------------------Pop up models messages--------------------------
 
   const handleCloseSuccsecModal = () => {
-    setSignInData({
-      ...signInData,
+    setSignUpData({
+      ...signUpData,
       loading: false,
       error: false,
       successmsg: false,
@@ -91,11 +94,11 @@ function signIn(props) {
   };
 
   const handleCloseLoadingModal = () => {
-    setSignInData({ ...signInData, loading: false });
+    setSignUpData({ ...signUpData, loading: false });
   };
   const handleCloseErrorModal = () => {
-    setSignInData({
-      ...signInData,
+    setSignUpData({
+      ...signUpData,
       loading: false,
       error: false,
       successmsg: false,
@@ -105,16 +108,14 @@ function signIn(props) {
 
   // eslint-disable-next-line react/no-unstable-nested-components
   function NavigateUser() {
-    if (signInData.NavigateToReferrer) {
-      if (isAuthenticated().user.admin === "1" || isAuthenticated().user.admin === "2")
-        return <Navigate to="/Dashboard" />;
-      return <Navigate to="/userRequestsTable" />;
+    if (signUpData.NavigateToReferrer) {
+      return <Navigate to="/Dashboard" />;
     }
   }
 
   const showSuccess = () => (
     <Dialog
-      open={signInData.successmsg}
+      open={signUpData.successmsg}
       onClose={handleCloseSuccsecModal}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
@@ -131,7 +132,7 @@ function signIn(props) {
         textAlign="center"
       >
         <MDTypography variant="h1" fontWeight="medium" color="white" mt={1}>
-          התחברת בהצלחה למערכת
+          נרשמת בהצלחה למערכת
         </MDTypography>
         <MDButton onClick={handleCloseSuccsecModal} variant="gradient" color="light">
           מעבר לאתר
@@ -141,7 +142,7 @@ function signIn(props) {
   );
   const showError = () => (
     <Dialog
-      open={signInData.error}
+      open={signUpData.error}
       onClose={handleCloseErrorModal}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
@@ -158,12 +159,12 @@ function signIn(props) {
         textAlign="center"
       >
         <MDTypography variant="h1" fontWeight="medium" color="white" mt={1}>
-          שגיאה בהתחברות
+          שגיאה בהרשמה
         </MDTypography>
 
         <DialogContent>
           <MDTypography variant="h6" fontWeight="medium" color="white" mt={1}>
-            {signInData.errortype}
+            וודא שהינך כבר רשום למערכת, במידה ולא נסה שנית מאוחר יותר
           </MDTypography>
           <MDButton onClick={handleCloseErrorModal} variant="gradient" color="light">
             סגירה
@@ -174,7 +175,7 @@ function signIn(props) {
   );
   const showLoading = () => (
     <Dialog
-      open={signInData.loading}
+      open={signUpData.loading}
       onClose={handleCloseLoadingModal}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
@@ -197,7 +198,7 @@ function signIn(props) {
 
         <DialogContent>
           <MDTypography variant="h5" fontWeight="medium" color="white" mt={1}>
-            ההץחברות תיקח מספר רגעים...
+            ההרשמה תיקח מספר רגעים...
           </MDTypography>
         </DialogContent>
       </MDBox>
@@ -213,23 +214,36 @@ function signIn(props) {
     let flag = true;
     const ErrorReason = [];
 
-    if (
-      !(
-        signInData.personalnumber === "" ||
-        signInData.personalnumber.length === 7 ||
-        signInData.personalnumber.length === 9
-      )
-    ) {
+    if (signUpData.personalnumber === "") {
       flag = false;
-      ErrorReason.push("אנא הכנס מספר אישי תקין");
+      ErrorReason.push("אנא הכנס מספר אישי");
       // toast.error(ErrorReason);
     }
+    if (!(signUpData.personalnumber.length === 7 || signUpData.personalnumber.length === 9)) {
+      flag = false;
+      ErrorReason.push("אנא וודא כי המספר האישי תקין");
+      // toast.error(ErrorReason);
+    }
+    if (signUpData.firstName === "") {
+      flag = false;
+      ErrorReason.push("אנא הכנס שם פרטי");
+      // toast.error(ErrorReason);
+    }
+    if (signUpData.lastName === "") {
+      flag = false;
+      ErrorReason.push("אנא הכנס שם משפחה");
+      // toast.error(ErrorReason);
+    }
+    // if (userType === "") {
+    //   flag = false;
+    //   ErrorReason.push("אנא בחר מערכת להרשמה");
+    //   // toast.error(ErrorReason);
+    // }
     if (flag !== true) {
       ErrorReason.forEach((reason) => {
         toast.error(reason);
         // setData({ ...data, loading: false, successmsg: false, error: true });
       });
-
       return false;
     } else {
       return true;
@@ -239,54 +253,36 @@ function signIn(props) {
 
   const SendFormData = async (event) => {
     event.preventDefault();
-    setSignInData({ ...signInData, loading: true, successmsg: false, error: false });
-    const { personalnumber } = signInData;
+    setSignUpData({ ...signUpData, loading: true, successmsg: false, error: false });
+    const newUser = {
+      firstName: signUpData.firstName,
+      lastLame: signUpData.lastName,
+      personalnumber: signUpData.personalnumber,
+      admin: "2",
+      unit: signUpData.unit,
+      phoneNumber: signUpData.phoneNumber,
+      email: signUpData.email,
+      request: signUpData.request,
+    };
     await axios
-      .post(`http://localhost:5000/NgCar/signin`, { personalnumber })
+      .post(`http://localhost:5000/NgCar/signup`, newUser)
       .then((res) => {
-        // console.log(res.data.user);
-        if (res.data.user === "DoNotExist" || res.data.user === undefined) {
-          setSignInData({
-            ...signInData,
-            errortype: "המשתמש אינו קיים, עליך להירשם",
+        if (res.data.user === "Exist") {
+          setSignUpData({
+            ...signUpData,
             loading: false,
-            successmsg: false,
             error: true,
+            errortype: "משתמש כבר קיים במערכת",
           });
-        } else if (
-          res.data.user.approved === false &&
-          (res.data.user.admin === "1" || res.data.user.admin === "2")
-        ) {
-          setSignInData({
-            ...signInData,
-            errortype: "המשתמש ממתין לאישור מנהל, אנא נסה שוב מאוחר יותר",
-            loading: false,
-            successmsg: false,
-            error: true,
-          });
-          const count = parseInt(localStorage.getItem("RefreshCount"), 10) + 1;
-          updateRefreshCount(count);
         } else {
           authenticate(res.data);
-          setSignInData({
-            ...signInData,
-            loading: false,
-            successmsg: true,
-            error: false,
-          });
+          setSignUpData({ ...signUpData, loading: false, error: false, successmsg: true });
           const count = parseInt(localStorage.getItem("RefreshCount"), 10) + 1;
           updateRefreshCount(count);
         }
       })
       .catch((error) => {
-        console.log(error);
-        setSignInData({
-          ...signInData,
-          errortype: "קיימת תקלת שרת אנא נסה שינית מאוחר יותר",
-          loading: false,
-          successmsg: false,
-          error: true,
-        });
+        setSignUpData({ ...signUpData, loading: false, error: true, successmsg: false });
       });
   };
 
@@ -298,71 +294,124 @@ function signIn(props) {
   };
 
   //* ------------------Send data to server - end--------------------------
-  const signInForm = () => (
-    <BasicLayout image={bgImage}>
-      <Card>
-        <MDBox
-          variant="gradient"
-          bgColor="mekatnar"
-          borderRadius="lg"
-          coloredShadow="mekatnar"
-          mx={2}
-          mt={-3}
-          p={2}
-          pb={5}
-          mb={1}
-          textAlign="center"
-        >
-          <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-            התחברות ל{title}
-          </MDTypography>
-        </MDBox>
-        <MDBox pt={4} pb={3} px={3}>
-          <MDBox component="form" role="form" onSubmit={onSubmit}>
-            <MDBox mb={2}>
-              <MDInput
-                required
-                type="text"
-                name="personalnumber"
-                onChange={handleChange}
-                variant="standard"
-                label="מספר אישי"
-                value={signInData.personalnumber}
-                fullWidth
-              />
-            </MDBox>
-            <MDBox mt={4} mb={1}>
-              <MDButton type="submit" variant="gradient" color="mekatnar" fullWidth>
-                התחברות
-              </MDButton>
-            </MDBox>
-            <MDBox mt={3} mb={1} textAlign="center">
-              <MDTypography variant="button" color="text">
-                עוד לא נרשמת?{" "}
-                <MDTypography
-                  component={Link}
-                  to={`/authentication/sign-up`}
-                  variant="button"
-                  color="mekatnar"
-                  fontWeight="medium"
-                  textGradient
-                >
-                  לחץ כאן
-                </MDTypography>
+  const singUpUser = () => (
+    <Card>
+      <MDBox
+        variant="gradient"
+        bgColor="mekatnar"
+        borderRadius="lg"
+        coloredShadow="success"
+        mx={2}
+        mt={-3}
+        p={3}
+        mb={1}
+        textAlign="center"
+      >
+        <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
+          {title}
+        </MDTypography>
+        <MDTypography display="block" variant="button" color="white" my={1}>
+          הגיע הזמן להירשם אלינו 😉
+        </MDTypography>
+      </MDBox>
+      <MDBox pt={4} pb={3} px={3}>
+        <MDBox component="form" role="form" onSubmit={onSubmit}>
+          <MDBox mb={2}>
+            <MDInput
+              required
+              type="text"
+              name="personalnumber"
+              onChange={handleChange}
+              variant="standard"
+              label="מספר אישי"
+              value={signUpData.personalnumber}
+              fullWidth
+            />
+          </MDBox>
+          <MDBox mb={2}>
+            <MDInput
+              required
+              type="text"
+              name="firstName"
+              label="שם פרטי"
+              variant="standard"
+              value={signUpData.firstName}
+              onChange={handleChange}
+              fullWidth
+            />
+          </MDBox>
+          <MDBox mb={2}>
+            <MDInput
+              required
+              type="text"
+              name="lastName"
+              label="שם משפחה"
+              variant="standard"
+              value={signUpData.lastName}
+              onChange={handleChange}
+              fullWidth
+            />
+          </MDBox>
+          <MDBox mb={2}>
+            <MDInput
+              required
+              type="text"
+              name="unit"
+              label="יחידה"
+              variant="standard"
+              value={signUpData.unit}
+              onChange={handleChange}
+              fullWidth
+            />
+          </MDBox>
+          <MDBox mb={2}>
+            <MDInput
+              required
+              type="email"
+              name="email"
+              label="אימייל"
+              variant="standard"
+              value={signUpData.email}
+              onChange={handleChange}
+              fullWidth
+            />
+          </MDBox>
+
+          {userType === "0" ? (
+            <MDTypography textGradient variant="caption" fontWeight="medium" color="error">
+              {` *שים לב, שרק חיילי מפקדת מקטנא"ר יכולים להירשם למערכת הוצל"א`}
+            </MDTypography>
+          ) : userType === "3" ? (
+            <MDTypography textGradient variant="caption" fontWeight="medium" color="error">
+              {` *שים לב, שרק חיילים שלא שייכים למפקדת מקטנא"ר יכולים להירשם למערכת תורה חילית`}
+            </MDTypography>
+          ) : null}
+          <MDBox mt={4} mb={1}>
+            <MDButton variant="gradient" color="mekatnar" type="submit" fullWidth>
+              הירשם
+            </MDButton>
+          </MDBox>
+          <MDBox mt={3} mb={1} textAlign="center">
+            <MDTypography variant="button" color="text">
+              <MDTypography
+                component={Link}
+                to={`/authentication/sign-in`}
+                variant="button"
+                color="mekatnar"
+                fontWeight="medium"
+                textGradient
+              >
+                להתחברות לחץ כאן
               </MDTypography>
-            </MDBox>
+            </MDTypography>
           </MDBox>
         </MDBox>
-      </Card>
-    </BasicLayout>
+      </MDBox>
+    </Card>
   );
 
   return (
-    <>
-      {/* <DashboardLayout> */}
-      {/* <DashboardNavbar /> */}
-      {/* <MDBox pt={6} pb={3}> */}
-      {/* //! fot the pop up warning windoes */}
+    <CoverLayout image={bgImage}>
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -380,12 +429,8 @@ function signIn(props) {
       {showLoading()}
       {NavigateUser()}
 
-      {signInForm()}
-      {/* </MDBox> */}
-      {/* <Footer /> */}
-      {/* </DashboardLayout> */}
-    </>
+      {singUpUser()}
+    </CoverLayout>
   );
 }
-
-export default signIn;
+export default SignUpUser;
